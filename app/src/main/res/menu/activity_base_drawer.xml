@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@mipmap/apple"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@mipmap/banana"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@mipmap/cucumber"
+            android:title="Tools" />
+        <item android:title="Sub items">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_four"
+                        android:icon="@mipmap/watermelon"
+                        android:title="Sub item 1" />
+                    <item
+                        android:id="@+id/nav_five"
+                        android:icon="@mipmap/grapes"
+                        android:title="Sub item 2" />
+                </group>
+            </menu>
+        </item>
+    </group>
+</menu>

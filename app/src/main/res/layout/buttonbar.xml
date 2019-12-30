@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/buttoncard"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#BF000000"
+        >
+        <Button
+            android:id="@+id/pre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:layout_weight="1"
+            android:text="上一章"
+            android:textColor="#70FFFFFF"
+            />
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+
+            />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:text="下一章"
+            android:textColor="#70FFFFFF"
+            />
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#BF000000"
+        >
+        <Button
+            android:id="@+id/mulu"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:drawableTop="@mipmap/mulumin"
+            android:text="目录"
+            />
+        <Button
+            android:id="@+id/huanyuan"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:drawableTop="@mipmap/earth"
+            android:text="换源"
+            />
+        <Button
+            android:id="@+id/liangdu"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:layout_weight="1"
+            android:text="亮度"
+            android:drawableTop="@mipmap/training"
+            />
+        <Button
+            android:id="@+id/shezhi"
+            android:background="@drawable/delete_alarm_btn_drawable"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/editor"
+            android:text="设置"
+
+            />
+    </LinearLayout>
+
+</LinearLayout>

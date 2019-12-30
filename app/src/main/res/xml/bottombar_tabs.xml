@@ -1,0 +1,19 @@
+<tabs xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <tab
+            id="@+id/home"
+            icon="@drawable/home"
+            title="首页" />
+        <tab
+            id="@+id/eye"
+            icon="@drawable/eye_protection"
+            title="发现" />
+        <tab
+            id="@+id/genie"
+            icon="@drawable/genie"
+            title="收藏夹" />
+        <tab
+            id="@+id/voice"
+            icon="@drawable/voiceshopping"
+            title="我" />
+    </tabs>

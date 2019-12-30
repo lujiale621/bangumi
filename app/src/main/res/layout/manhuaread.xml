@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlPrimaryColor="#444444"
+        app:srlAccentColor="@android:color/white"
+        app:srlEnablePreviewInEditMode="true">
+        <!--srlAccentColor srlPrimaryColor 将会改变 Header 和 Footer 的主题颜色-->
+        <!--srlEnablePreviewInEditMode 可以开启和关闭预览功能-->
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/manhuaview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mhuareadtoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/refreshLayout"
+        android:background="#BF000000" />
+    <LinearLayout
+        android:background="#B3000000"
+        android:id="@+id/manhualeftmenu"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/manhuatab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextColor="#00ACC1"
+            android:background="#CC000000"/>
+
+        <ListView
+            android:id="@+id/manhualist"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/manhuafleshbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#28000000"
+                android:textColor="#00ACC1"
+                android:text="刷新" />
+
+            <Button
+                android:id="@+id/manhuadore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#28000000"
+                android:textColor="#00ACC1"
+                android:text="倒序" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/manhuabuttonmenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/refreshLayout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#BF000000"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/manhuapre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="上一章"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:textColor="#B5FFFFFF"  />
+
+            <SeekBar
+                android:id="@+id/manhuaseekbar"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:max="100"
+                android:progress="0"
+
+                />
+
+            <Button
+                android:id="@+id/manhuanext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="下一章"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:textColor="#B5FFFFFF" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#BF000000"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/manhuamulu"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:text="目录"
+                android:drawableTop="@mipmap/mulu"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/manhuahuanyuan"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:text="换源"
+                android:drawableTop="@mipmap/atm"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/manhualiangdu"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:text="亮度"
+                android:drawableTop="@mipmap/daytimemode"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/manhuashezhi"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:text="设置"
+                android:drawableTop="@mipmap/set"
+                android:textColor="#FFFFFF"
+
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
