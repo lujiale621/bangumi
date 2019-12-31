@@ -8,9 +8,11 @@ import com.google.android.material.navigation.NavigationView
 
 import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Util.FragmentUtil
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.app_bar_base.*
 import kotlinx.android.synthetic.main.mainlayout.*
-import org.jetbrains.anko.toast
 
 
 class MainActivity :BaseActivity(){
@@ -19,6 +21,9 @@ class MainActivity :BaseActivity(){
 
     override fun initview() {
         super.initview()
+        // 在调用init方法前设置自定义更新对话框布局
+
+        Bugly.init(getApplicationContext(), "c5ab2b04e8", false);
         icon=ImageView(this)
         icon.setImageResource(R.mipmap.menuleft)
         toolbar.addView(icon)

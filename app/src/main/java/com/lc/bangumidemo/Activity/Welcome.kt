@@ -8,6 +8,7 @@ import androidx.core.view.ViewPropertyAnimatorListener
 import com.lc.bangumidemo.KtUtil.screenheight
 import com.lc.bangumidemo.KtUtil.screenwidth
 import com.lc.bangumidemo.R
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
@@ -35,7 +36,7 @@ class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         ViewCompat.animate(welcome).scaleX(1.0f).scaleY(1.0f).setDuration(2000).setListener(this)
     }
 

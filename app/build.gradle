@@ -5,18 +5,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
-    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.m"
+        applicationId "com.lc.bangumidemo"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
-        versionName "4.0"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
@@ -121,7 +118,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     //图片标签
     implementation 'com.github.open-android:labelview:0.1.0'
-
+    //bugly
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
 
 
 }
