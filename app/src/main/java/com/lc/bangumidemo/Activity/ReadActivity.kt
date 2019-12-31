@@ -25,11 +25,13 @@ import kotlinx.android.synthetic.main.tesst.*
 import android.view.animation.AnimationUtils
 import android.widget.ListView
 import com.lc.bangumidemo.KtUtil.*
+import com.lc.bangumidemo.MyRetrofit.api.DetailData
 import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Sqlite.NoveDatabase.BookIndexclass
 import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookselect
 import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookupdata
 import com.lc.bangumidemo.Sqlite.NoveDatabase.MyDatabaseHelper
+import io.reactivex.Observer
 
 
 class ReadActivity :BaseActivity() {
@@ -63,30 +65,37 @@ class ReadActivity :BaseActivity() {
         RxBus.getInstance()
             .tObservable(code, RxBusBaseMessage::class.java)
             .bindUntilEvent(this,Lifecycle.Event.ON_DESTROY)
-            .subscribe(object : io.reactivex.functions.Consumer<RxBusBaseMessage> {
+            .subscribe(object : Observer<RxBusBaseMessage> {
+                override fun onError(e: Throwable) {
 
-                override fun accept(t: RxBusBaseMessage?) {
-                    if(t!!.code==0){
-                        Log.e("RXJAVA","初始化初始章节")
-                        var indexres=    Bookselect.selectbookindex(this@ReadActivity)!!
-                        Mapinit(this@ReadActivity, indexres)
-                    }
-                    if(t!!.code==1){
-                        Log.e("RXJAVA","开始初始化前后章")
-                        var indexres=    Bookselect.selectbookindex(this@ReadActivity)!!
-                        InitMapupdata(this@ReadActivity, indexres)
-                    }
-                    if(t!!.code==2){
-                        Log.e("RXJAVA","初始化完成进入视图")
-                        initmyview()
-                        avi.hide()
-                    }
-                    if(t!!.code==3){
-                        Log.e("RXJAVA","关闭左侧菜单")
-                        leftmenu.startAnimation(leftmenuback)
-                        }
                 }
 
+                override fun onNext(t: RxBusBaseMessage) {
+                        if (t!!.code == 0) {
+                            Log.e("RXJAVA", "初始化初始章节")
+                            var indexres = Bookselect.selectbookindex(this@ReadActivity)!!
+                            Mapinit(this@ReadActivity, indexres)
+                        }
+                        if (t!!.code == 1) {
+                            Log.e("RXJAVA", "开始初始化前后章")
+                            var indexres = Bookselect.selectbookindex(this@ReadActivity)!!
+                            InitMapupdata(this@ReadActivity, indexres)
+                        }
+                        if (t!!.code == 2) {
+                            Log.e("RXJAVA", "初始化完成进入视图")
+                            initmyview()
+                            avi.hide()
+                        }
+                        if (t!!.code == 3) {
+                            Log.e("RXJAVA", "关闭左侧菜单")
+                            leftmenu.startAnimation(leftmenuback)
+                        }
+                }
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
             })
     }
 
