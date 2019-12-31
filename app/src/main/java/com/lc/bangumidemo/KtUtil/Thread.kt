@@ -25,7 +25,7 @@ fun loadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: Bo
                 2 -> {
                     try {
                         var result= msg.obj as BookContent
-                        var string= result.getString()
+                        var string= result.getString(context)
                         var list = PagesizeUtil.txttolist(
                             string,
                             context,
@@ -114,7 +114,7 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
                 2 -> {
                     try {
                         var result= msg.obj as BookContent
-                        var string= result.getString()
+                        var string= result.getString(context)
                         var list = PagesizeUtil.txttolist(
                             string,
                             context,
@@ -209,7 +209,7 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
                     var result:BookContent
                     try {
                          result= msg.obj as BookContent
-                        var string= result.getString()
+                        var string= result.getString(context)
                         var list = PagesizeUtil.txttolist(
                             string,
                             context,

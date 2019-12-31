@@ -132,7 +132,7 @@ class ScanViewAdapter(
             fontsize,
             linesize
         )
-        pagesize.setText("${sult.contentindex+1}/${list.size}")
+        pagesize.setText("${sult.contentindex+1}/${list.size-1}")
         pagetitle.setText(
             stdeal(
                 bookDetail!!.list[sult.pageindex].num,

@@ -67,6 +67,17 @@ object PagesizeUtil{
             cuttxtt(st, linecount, linesize)//返回加载多少个字能填满一行
         return lincount * count
     }
+    fun getlinecount(context: Context, width: Int, height: Int, fontsize: Int, lincount: Int): Int {
+
+        val st = "吖"
+        val si = cal(fontsize, context)
+        val w1 = si * st.length
+        val widthsub = width - si
+        val linecount = (w1 / widthsub).toInt() + 1
+        val linesize = (widthsub / si).toInt()
+        val count = cuttxtt(st, linecount, linesize)//返回加载多少个字能填满一行
+        return count
+    }
     fun cal(size: Int, context: Context): Float {
         return (size * context.resources.displayMetrics
 
