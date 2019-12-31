@@ -25,13 +25,6 @@
             app:label_backgroundColor="#C2185B"
             app:label_orientation="RIGHT_TOP"
             app:label_textStyle="ITALIC"/>
-<!--        <ImageView-->
-<!--            android:id="@+id/img_icon"-->
-<!--            android:background="@drawable/searchbook"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
     </androidx.cardview.widget.CardView>
     <TextView
         android:layout_gravity="center"
