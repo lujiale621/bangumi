@@ -108,8 +108,54 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setmenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#BF000000"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/addfontsize"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:drawableTop="@mipmap/apuls"
+                android:textColor="#FFFFFF"
+                />
 
+            <Button
+                android:id="@+id/cutfontsize"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:drawableTop="@mipmap/acut"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/addlinesize"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:drawableTop="@mipmap/addline"
+                android:textColor="#FFFFFF"
+                />
+
+            <Button
+                android:id="@+id/cutlinesize"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_weight="1"
+                android:background="@drawable/delete_alarm_btn_drawable"
+                android:drawableTop="@mipmap/cutline"
+                android:textColor="#FFFFFF"
+
+                />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

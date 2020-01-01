@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.lc.bangumidemo.Sqlite.CollectDatabase.Collectdbhelper;
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatahelper;
 
 public class Bookreadclean {
     public static void clean(Context context){

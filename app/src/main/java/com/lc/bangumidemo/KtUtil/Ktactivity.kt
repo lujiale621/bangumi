@@ -93,13 +93,13 @@ object PagesizeUtil{
     fun txttolist(st :String,context: Context, fontsize: Int, lintcount: Int): MutableList<String> {
         var listpage: MutableList<String> = ArrayList()
         var sting=st
-        var apagesize=
-            getpagesize(context, fontsize, lintcount)
+        var apagesize= getpagesize(context, fontsize, lintcount)
         var pagec=st.length/apagesize+1
         var sumsize = pagec*apagesize
         var add=sumsize-st.length
         while (add!=0)
         {
+            if (add<0){break}
             sting += " "
             add--
         }
