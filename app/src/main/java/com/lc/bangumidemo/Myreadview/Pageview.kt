@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 
 import com.lc.bangumidemo.KtUtil.fontsize
+import com.lc.bangumidemo.KtUtil.linesize
 import com.lc.bangumidemo.KtUtil.screenheight
 import com.lc.bangumidemo.KtUtil.screenwidth
 
@@ -26,24 +27,26 @@ class Pageview : View {
     fun setContent(string: String) {
         content = string
     }
-
+/*
+     (myheigh - mylinesize * (h + 40)) / 2 + (myheigh - mylinesize * (h + 40)) / 4 + i * (h + 40),
+ */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (content != null) {
             val pen = Paint()
-            val fontsize = calcFontSize(mytextsize).toFloat()
+            val fontsize = calcFontSize(fontsize).toFloat()
             pen.textSize = fontsize
             val wid = fontsize * content!!.length
             val widthsub = mywidth - fontsize
             val linecount = (wid / widthsub).toInt() + 1
-            val linesize = (widthsub / fontsize).toInt()
-            val count = cuttxt(content!!, linecount, linesize)//返回加载多少个字能填满整个屏幕
+            val linesizes = (widthsub / fontsize).toInt()
+            val count = cuttxt(content!!, linecount, linesizes)//返回加载多少个字能填满整个屏幕
             val h = pen.textSize
-            for (i in 0 until linecount) {
+            for (i in 0 until txtlist.size) {
                 canvas.drawText(
                     txtlist[i],
                     fontsize / 2,
-                    (myheigh - 16 * (h + 40)) / 2 + (myheigh - 16 * (h + 40)) / 4 + i * (h + 40),
+                    (myheigh - linesize * (h + 40)) / 2 + (myheigh - linesize * (h + 40)) / 6 + i * (h + 40),
                     pen
                 )
             }
@@ -57,6 +60,7 @@ class Pageview : View {
         var addsize = linesize * linecount - subsize
         val temp = subsize + addsize
         while (addsize != 0) {
+            if (addsize<0){break}
             string = "$string "
             addsize--
         }
@@ -76,7 +80,4 @@ class Pageview : View {
 
     }
 
-    companion object {
-        var mytextsize = fontsize
-    }
 }

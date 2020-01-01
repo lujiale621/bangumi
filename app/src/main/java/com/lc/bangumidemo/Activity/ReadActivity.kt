@@ -1,5 +1,6 @@
 package com.lc.bangumidemo.Activity
 
+import android.app.Activity
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -25,12 +26,13 @@ import kotlinx.android.synthetic.main.tesst.*
 import android.view.animation.AnimationUtils
 import android.widget.ListView
 import com.lc.bangumidemo.KtUtil.*
-import com.lc.bangumidemo.MyRetrofit.api.DetailData
 import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Sqlite.NoveDatabase.BookIndexclass
 import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookselect
 import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookupdata
 import com.lc.bangumidemo.Sqlite.NoveDatabase.MyDatabaseHelper
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatahelper
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataupdata
 import io.reactivex.Observer
 
 
@@ -56,6 +58,8 @@ class ReadActivity :BaseActivity() {
         readtoolbar.isVisible=false
         buttonmenu.isVisible=false
         leftmenu.isVisible=false
+        //隐藏设置栏
+        setmenu.isVisible=false
         avi.show()
 
 
@@ -109,16 +113,14 @@ class ReadActivity :BaseActivity() {
         //查询索引信息
         Bookselect.selectbookindex(this)
         //开始进行加载
-        initloadbookdatatopage(
-            this,
-            bookDetail,
-            hardpageindex
-        )
+        initloadbookdatatopage(this, bookDetail, hardpageindex)
 
         }
 
     fun initmyview() {
         //初始化动画
+        avi.hide()
+        lockscreen(false)
         buttonback = AnimationUtils.loadAnimation(this@ReadActivity, R.anim.buttonback)
         buttonshow= AnimationUtils.loadAnimation(this@ReadActivity, R.anim.buttonshow)
         toorbarshow=AnimationUtils.loadAnimation(this@ReadActivity, R.anim.toobaranim)
@@ -149,6 +151,7 @@ class ReadActivity :BaseActivity() {
                 buttonmenu.isVisible=false
                 readtoolbar.isVisible=false
                 ismenushow=false
+                closeothermenu()
                 lockscreen(false)
             }
 
@@ -179,6 +182,10 @@ class ReadActivity :BaseActivity() {
             leftmenu.startAnimation(leftmenushow)
             islistshow=true
         }
+        shezhi.setOnClickListener {
+            setmenu.isVisible=true
+        }
+
         list.setOnItemClickListener { parent, view, position, id ->
             lockscreen(true)
             var db =
@@ -252,10 +259,47 @@ class ReadActivity :BaseActivity() {
 
 
     }
+    private fun closeothermenu(){
+        setmenu.isVisible=false
+    }
     override fun initlistener() {
         super.initlistener()
-
+        addfontsize.setOnClickListener {
+            avi.show()
+            lockscreen(true)
+            fontsize += 1
+            if (fontsize>28){ fontsize=28 }
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        cutfontsize.setOnClickListener {
+            avi.show()
+            lockscreen(true)
+            fontsize -= 1
+            if (fontsize<17){ fontsize=17}
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        addlinesize.setOnClickListener {
+            avi.show()
+            lockscreen(true)
+            linesize += 1
+            if(linesize>21){linesize=21}
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        cutlinesize.setOnClickListener {
+            avi.show()
+            lockscreen(true)
+            linesize -= 1
+            if(linesize<16){linesize=16}
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
     }
+
+
+
     override fun onDestroy() {
         super.onDestroy()
         destoryandsave(this)

@@ -8,11 +8,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lc.bangumidemo.Adapter.Mhuadapt
@@ -27,18 +24,14 @@ import com.lc.bangumidemo.RxBus.RxBus
 import com.lc.bangumidemo.RxBus.RxBusBaseMessage
 import com.ramotion.foldingcell.FoldingCell
 import com.trello.rxlifecycle3.android.lifecycle.kotlin.bindUntilEvent
-import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.carditem.view.*
-
 import kotlinx.android.synthetic.main.search.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
+import kotlin.Exception
 
 class Searchactivity : BaseActivity() {
     lateinit var searchItem: MenuItem
@@ -144,6 +137,8 @@ class Searchactivity : BaseActivity() {
 
                 override fun onError(code: Int, msg: String?) {
                     super.onError(code, msg)
+                    anmo.hide()
+                    Toast.makeText(this@Searchactivity,"网络连接失败~",Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -154,6 +149,11 @@ class Searchactivity : BaseActivity() {
         if (query != null) {
             movieLoader.getMovies(query).subscribe(object : HttpObserver<SearchResult>() {
                 override fun onSuccess(t: SearchResult?) {
+                    if(t!!.list==null){
+                        anmo.hide()
+                        Toast.makeText(this@Searchactivity,"搜索不到相关资源~",Toast.LENGTH_SHORT).show()
+                        return
+                    }
                     for (i in t!!.list) {
                         RxBus.getInstance().send(11, RxBusBaseMessage(11, i))
                     }
@@ -163,6 +163,8 @@ class Searchactivity : BaseActivity() {
 
                 override fun onError(code: Int, msg: String?) {
                     super.onError(code, msg)
+                    anmo.hide()
+                    Toast.makeText(this@Searchactivity,"网络连接失败~",Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -176,11 +178,15 @@ class Searchactivity : BaseActivity() {
     }
 
     private fun searchmhua(query: String?) {
-        var manhuaLoader: ManhuaLoader =
-            ManhuaLoader()
+        var manhuaLoader: ManhuaLoader = ManhuaLoader()
         if (query != null) {
             manhuaLoader.getManhua(query).subscribe(object : HttpObserver<ManhuaSearchResult>() {
                 override fun onSuccess(t: ManhuaSearchResult?) {
+                    if(t!!.list==null){
+                        anmo.hide()
+                        Toast.makeText(this@Searchactivity,"搜索不到相关资源~",Toast.LENGTH_SHORT).show()
+                        return
+                    }
                     try {
                         for (i in t!!.list) {
                             mhualists.add(i)
@@ -195,7 +201,8 @@ class Searchactivity : BaseActivity() {
 
                 override fun onError(code: Int, msg: String?) {
                     super.onError(code, msg)
-
+                        anmo.hide()
+                        Toast.makeText(this@Searchactivity,"网络连接失败~",Toast.LENGTH_SHORT).show()
                 }
             })
 
@@ -327,14 +334,12 @@ class Searchactivity : BaseActivity() {
                             var result = msg.obj as BookResult
                             if (result != null) {
                                 anmo.hide()
+                                if (result.list==null){throw NullPointerException()}
                                 getbookdata(result)
                             }
                         } catch (e: Exception) {
-                            var intent = Intent(this@Searchactivity, ErrorActivity::class.java)
-                            intent.putExtra("msg", "网络错误")
-                            intent.putExtra("tag", "Search_Activity")
                             anmo.hide()
-                            startActivity(intent)
+                            Toast.makeText(this@Searchactivity,"搜索不到相关资源~",Toast.LENGTH_SHORT).show()
                         }
 
                     }
@@ -358,6 +363,8 @@ class Searchactivity : BaseActivity() {
                     }
 
                     override fun onFailure(call: Call<BookResult>, t: Throwable) {
+                        anmo.hide()
+                        Toast.makeText(this@Searchactivity,"网络连接失败~",Toast.LENGTH_SHORT).show()
                         message.obj = null
                         message.what = 2
                         mHamdler1.sendMessage(message)

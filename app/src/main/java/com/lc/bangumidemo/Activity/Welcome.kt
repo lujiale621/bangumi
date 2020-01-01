@@ -5,9 +5,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.ViewPropertyAnimatorListener
+import com.lc.bangumidemo.KtUtil.fontsize
+import com.lc.bangumidemo.KtUtil.linesize
 import com.lc.bangumidemo.KtUtil.screenheight
 import com.lc.bangumidemo.KtUtil.screenwidth
 import com.lc.bangumidemo.R
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataclass
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatahelper
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatainsert
+import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataselect
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
@@ -29,6 +35,16 @@ class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
         screenwidth =display.width
         screenheight =display.height
         //启动前检查数据是否有误
+        //启动前检查是否存在用户数据
+        var userdbhelper=Userdatahelper(this,"user.db",null,1)
+        var result=Userdataselect.selectUserdata(userdbhelper)
+        if(result==null){
+            Userdatainsert.insertuserdata(userdbhelper, Userdataclass(fontsize, linesize))
+        } else{
+            fontsize=result.fontsize
+            linesize=result.linesize
+        }
+        userdbhelper.close()
 
         startActivity<MainActivity>()
         finish()

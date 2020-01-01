@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="#D6C5C5"
+        android:background="@mipmap/indexbackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         app:titleTextColor="@android:color/white"
         />
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
     <com.roughike.bottombar.BottomBar
-        android:background="#D6C5C5"
+        android:background="@mipmap/indexbackground"
         android:gravity="bottom"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"

@@ -41,6 +41,7 @@
         <activity android:name=".Activity.ErrorActivity"></activity>
         <activity android:name=".Activity.MhuaDetailActivity"></activity>
         <activity android:name=".Activity.MhuaReadActivity"></activity>
+        <activity android:name=".Activity.Aboutactivity"></activity>
         <activity android:name=".Activity.MoviePlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
