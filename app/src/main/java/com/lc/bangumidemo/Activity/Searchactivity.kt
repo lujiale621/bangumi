@@ -339,7 +339,7 @@ class Searchactivity : BaseActivity() {
                             }
                         } catch (e: Exception) {
                             anmo.hide()
-                            Toast.makeText(this@Searchactivity,"搜索不到x相关资源~",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Searchactivity,"搜索不到相关资源~",Toast.LENGTH_SHORT).show()
                         }
 
                     }
