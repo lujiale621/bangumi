@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.dymatfragment.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.NullPointerException
 import java.net.DatagramSocketImplFactory
 import java.util.ArrayList
 import java.util.stream.LongStream
@@ -45,13 +46,21 @@ class DymatFragment :BaseFragment() {
 
     override fun startaction() {
         super.startaction()
+        animcol.hide()
         var datalist=selectcollectalldata(mcontext)
         var collectadapter=Collectdatadapter(mcontext, datalist as ArrayList<Collectdataclass>)
         collectadapter.setOnCollectClicklistener(object: Collectdatadapter.onCollectClicklistener {
             override fun onItemClick(requestdata: Collectdataclass) {
                 lockscreen(true)
-                gotoread(requestdata,mcontext,null)
-                lockscreen(false)
+                animcol.show()
+                try {
+                    gotoread(requestdata,mcontext,null)
+                }catch (e:Exception){
+                    lockscreen(false)
+                    animcol.hide()
+                    print(e.toString())
+                }
+
             }
         })
         dymgridview.adapter=collectadapter

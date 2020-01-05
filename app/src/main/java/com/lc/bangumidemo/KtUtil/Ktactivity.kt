@@ -160,6 +160,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
             call.enqueue(object : Callback<BookDetail> {
                 override fun onFailure(call: Call<BookDetail>, t: Throwable) {
                     println("连接失败")
+                    throw NullPointerException()
                 }
 
                 override fun onResponse(
@@ -175,7 +176,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                             context.startActivity(intent)
                         } catch (e: Exception) {
                             print("此书已失效")
-
+                            throw NullPointerException()
                         }
                     }else{
                         var db = Collectdbhelper(context, "collect.db", null, 1)
@@ -230,6 +231,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                     override fun onError(code: Int, msg: String?) {
                         super.onError(code, msg)
                         print("此书已失效")
+                        throw NullPointerException()
                     }
                 })
             }}
