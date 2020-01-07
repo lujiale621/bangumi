@@ -4,11 +4,6 @@ package com.lc.bangumidemo.Adapter
 import android.view.View
 
 abstract class PageAdapter {
-    /**
-     * @return 页面view
-     */
-    abstract val view: View
-
     abstract val count: Int
 
     /**

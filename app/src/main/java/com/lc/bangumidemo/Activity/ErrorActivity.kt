@@ -14,6 +14,8 @@ class ErrorActivity : BaseActivity() {
     override fun initview() {
         super.initview()
          toast(intent.getStringExtra("msg"))
+
+         toast(intent.getStringExtra("tag"))
     }
 
     override fun startaction() {
@@ -27,7 +29,7 @@ class ErrorActivity : BaseActivity() {
         var tag=intent.getStringExtra("tag")
         when(tag){
                 "BookDetailActivity"->{ }
-            "Read_Activity"->{
+                 "Read_Activity"->{
                 destoryandsave(this)
             }
         }

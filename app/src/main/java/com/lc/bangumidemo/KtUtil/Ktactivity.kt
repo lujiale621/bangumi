@@ -34,6 +34,7 @@ var screenheight=0    //初始屏幕高度
 var fontsize =23 //默认字体大小
 var linesize =16 //默认显示行数
 var position:Int=0
+var backgroundcolor:String="#ffffff"
 
 var hardpageindex=0
 var hardcontentindex=0
@@ -160,7 +161,6 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
             call.enqueue(object : Callback<BookDetail> {
                 override fun onFailure(call: Call<BookDetail>, t: Throwable) {
                     println("连接失败")
-                    throw NullPointerException()
                 }
 
                 override fun onResponse(
@@ -176,7 +176,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                             context.startActivity(intent)
                         } catch (e: Exception) {
                             print("此书已失效")
-                            throw NullPointerException()
+
                         }
                     }else{
                         var db = Collectdbhelper(context, "collect.db", null, 1)
@@ -221,7 +221,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                             )
                             var result = CollectdataSelect.selectcollectdata(db, selectdata)
                             if (result!=null){
-                                if(result.size>requestdata.size)
+                                if(result.size>=requestdata.size)
                                 {
                                     cover.labelText="new"
                                 }
@@ -231,7 +231,6 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                     override fun onError(code: Int, msg: String?) {
                         super.onError(code, msg)
                         print("此书已失效")
-                        throw NullPointerException()
                     }
                 })
             }}

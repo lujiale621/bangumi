@@ -4,8 +4,11 @@
     android:id="@+id/pagelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     >
+    <ImageView
+        android:id="@+id/pagebg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <com.lc.bangumidemo.Myreadview.Pageview
         android:id="@+id/pageview"
         android:layout_width="match_parent"

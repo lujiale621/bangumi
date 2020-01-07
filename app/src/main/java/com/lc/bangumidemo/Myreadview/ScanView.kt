@@ -119,7 +119,7 @@ class ScanView : RelativeLayout {
     fun setAdapter(adapter: ScanViewAdapter) {
         removeAllViews()
         this.adapter = adapter
-        prePage = adapter.view
+        prePage = adapter.getview()
         addView(
             prePage, 0, RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -128,7 +128,7 @@ class ScanView : RelativeLayout {
         )
         adapter.addContent(prePage!!, index - 1)
 
-        currPage = adapter.view
+        currPage = adapter.getview()
         addView(
             currPage, 0, RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -137,7 +137,7 @@ class ScanView : RelativeLayout {
         )
         adapter.addContent(currPage!!, index)
 
-        nextPage = adapter.view
+        nextPage = adapter.getview()
         addView(
             nextPage, 0, RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,

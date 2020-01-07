@@ -4,9 +4,11 @@
     android:id="@+id/readlinelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:orientation="vertical">
-
+    <ImageView
+        android:id="@+id/bgcolor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <com.lc.bangumidemo.Myreadview.ScanView
         android:id="@+id/pageview"
         android:layout_width="match_parent"
@@ -156,6 +158,148 @@
 
                 />
         </LinearLayout>
+            <LinearLayout
+                android:id="@+id/setliangdu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#BF000000"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/colwrite"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="50dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground = "?attr/selectableItemBackground"
+                    >
+                    <ImageView
+                        android:src="#FFFFFF"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/colbule"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="50dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground = "?attr/selectableItemBackground"
+                    >
+                    <ImageView
+                        android:src="#A7FFEB"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/colgreen"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="50dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground = "?attr/selectableItemBackground"
+                    >
+                    <ImageView
+                        android:src="#B9F6CA"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/colgreen-2"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="50dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground = "?attr/selectableItemBackground"
+                    >
+                    <ImageView
+                        android:src="#CCFF90"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/colyellew"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="50dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground = "?attr/selectableItemBackground"
+                    >
+                    <ImageView
+                        android:src="#F4FF81"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="9"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round"
+                >
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="自定义"
+                    android:textSize="20dp"
+                    android:textColor="#FF80AB"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -211,13 +355,14 @@
     </LinearLayout>
 
     <com.wang.avi.AVLoadingIndicatorView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_centerInParent="true"
         android:visibility="visible"
-        app:indicatorColor="#8D000000"
+        app:indicatorColor="#80D8FF"
+        app:indicatorName="BallScaleMultipleIndicator"
         android:id="@+id/avi"
-        app:indicatorName="LineScalePulseOutIndicator" />
+        />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

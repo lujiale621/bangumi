@@ -28,7 +28,8 @@ class Userdatahelper(
         val CREATE_UserData = ("create table UserData ("
                 + "id integer primary key autoincrement, "
                 + "fontsize integer, "
-                + "linesize integer)"
+                + "linesize integer, "
+                + "backgroundcolor text)"
                 )
 
     }

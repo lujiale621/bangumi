@@ -1,6 +1,7 @@
 package com.lc.bangumidemo.Activity
 
 import android.app.Activity
+import android.graphics.Color
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -34,6 +35,11 @@ import com.lc.bangumidemo.Sqlite.NoveDatabase.MyDatabaseHelper
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatahelper
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataupdata
 import io.reactivex.Observer
+import org.jetbrains.anko.backgroundColor
+import android.graphics.Bitmap
+import android.graphics.drawable.ColorDrawable
+import android.widget.SeekBar
+import android.widget.Toast
 
 
 class ReadActivity :BaseActivity() {
@@ -44,6 +50,7 @@ class ReadActivity :BaseActivity() {
     lateinit var leftmenushow:Animation
     lateinit var leftmenuback:Animation
 
+     var adapt: ScanViewAdapter?=null
     companion object {
         var ismenushow=false
         var islistshow=false
@@ -60,9 +67,21 @@ class ReadActivity :BaseActivity() {
         leftmenu.isVisible=false
         //隐藏设置栏
         setmenu.isVisible=false
+        setliangdu.isVisible=false
         avi.show()
-
-
+        val mydrawable = ColorDrawable(Color.parseColor(backgroundcolor))
+        bgcolor.setImageDrawable(mydrawable)
+        //初始化进度条
+        var sult = Bookselect.selectbookindex(this@ReadActivity)
+        if (sult!=null) {
+            var temp=((sult.pageindex + 1).toFloat()/sult.pagecount.toFloat())*100
+            if(temp>=100)
+            {seekbar.progress=100}
+            else
+            {
+                seekbar.progress= temp.toInt()
+            }
+        }
     }
 
     fun Rxrecive(code:Int){
@@ -170,6 +189,7 @@ class ReadActivity :BaseActivity() {
 
             override fun onAnimationStart(animation: Animation?) {
                 lockscreen(true)
+                closeothermenu()
             }
         })
         mulu.setOnClickListener {
@@ -183,13 +203,16 @@ class ReadActivity :BaseActivity() {
             islistshow=true
         }
         shezhi.setOnClickListener {
+            closeothermenu()
             setmenu.isVisible=true
         }
-
+        liangdu.setOnClickListener {
+            closeothermenu()
+            setliangdu.isVisible=true
+        }
         list.setOnItemClickListener { parent, view, position, id ->
             lockscreen(true)
-            var db =
-                MyDatabaseHelper(this, "bookstore", null, 1)
+            var db = MyDatabaseHelper(this, "bookstore", null, 1)
             var updata = BookIndexclass(
                 null,
                 bookDetail!!.data.author,
@@ -207,7 +230,7 @@ class ReadActivity :BaseActivity() {
         }
 
         var returnsult= Bookselect.selectbookindex(this)
-        var adapt= returnsult?.let { ScanViewAdapter(this, it) }
+        adapt= returnsult?.let { ScanViewAdapter(this, it) }
         adapt?.let { pageview.setAdapter(it) }
         adapt?.setonPageclickListener(pageview,object :ScanView.OnpageClick{
             override fun onItemClick() {
@@ -261,9 +284,14 @@ class ReadActivity :BaseActivity() {
     }
     private fun closeothermenu(){
         setmenu.isVisible=false
+        setliangdu.isVisible=false
     }
+
+
+
     override fun initlistener() {
         super.initlistener()
+
         addfontsize.setOnClickListener {
             avi.show()
             lockscreen(true)
@@ -296,9 +324,38 @@ class ReadActivity :BaseActivity() {
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
+        //设置背景颜色
+        colwrite.setOnClickListener {
+            backgroundcolor="#FFFFFF"
+
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        colbule.setOnClickListener {
+            backgroundcolor="#A7FFEB"
+
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        colgreen.setOnClickListener {
+            backgroundcolor="#B9F6CA"
+
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        colgreen_2.setOnClickListener {
+            backgroundcolor="#CCFF90"
+
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
+        colyellew.setOnClickListener {
+            backgroundcolor="#F4FF81"
+
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()

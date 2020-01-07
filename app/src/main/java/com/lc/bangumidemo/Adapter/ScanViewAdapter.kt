@@ -3,8 +3,13 @@ package com.lc.bangumidemo.Adapter
 
 import android.content.Context
 import android.content.res.AssetManager
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -29,16 +34,28 @@ class ScanViewAdapter(
     internal var db: MyDatabaseHelper? = null
     internal var selectclass: Selectclass? = null
     internal var startindex: BookIndexclass? = null
-
+    internal var layview:View?=null
+    var bg:Drawable?=null
     override val count: Int
         get() = 0
 
-    override val view: View
-        get() = LayoutInflater.from(context).inflate(
-            R.layout.page_layout,
-            null
-        )
+    /**
+     * LayoutInflater.from(context).inflate(R.layout.page_layout, null)
+     */
 
+
+    open fun setbkcolor(b:Drawable){ bg=b }
+
+    fun getview():View?
+    {
+        layview =LayoutInflater.from(context).inflate(R.layout.page_layout, null)
+        if (bg!=null)
+        {
+            var pageviewbg= layview?.findViewById<ImageView>(R.id.pagebg)
+            pageviewbg?.setImageDrawable(bg)
+        }
+        return layview
+    }
     init {
         am = context.assets
         db= MyDatabaseHelper(context, "bookstore", null, 1)
@@ -48,6 +65,8 @@ class ScanViewAdapter(
             startindex.pagecount
         )
         this.startindex = startindex
+        val mydrawable = ColorDrawable(Color.parseColor(backgroundcolor))
+        setbkcolor(mydrawable)
     }
         fun setonPageclickListener(view: ScanView,onpageclick: ScanView.OnpageClick){
             view.setOnpageClick(onpageclick)
@@ -84,7 +103,6 @@ class ScanViewAdapter(
                         retsult.contentindex - 1
                     )
                     Bookupdata.updata(db!!, requese)
-                    RxBus.getInstance().send(4, RxBusBaseMessage(4,"updataui"))
                     updatamenu(context,pagesize,pagetitle, pace)
                     Mapupdata(context, requese)
                 } else {
@@ -99,7 +117,6 @@ class ScanViewAdapter(
                         retsult.contentindex + 1
                     )
                     Bookupdata.updata(db!!, requese)
-                    RxBus.getInstance().send(4, RxBusBaseMessage(4,"updataui"))
                     updatamenu(context,pagesize,pagetitle, pace)
                     Mapupdata(context, requese)
                 }
@@ -120,8 +137,7 @@ class ScanViewAdapter(
     }
     fun updatamenu(context: Context,pagesize:TextView,pagetitle:TextView,pace:TextView){
         var sult = Bookselect.selectbookindex(context)
-        var i =
-            MyDatabaseHelper(context, "bookstore", null, 1)
+        var i = MyDatabaseHelper(context, "bookstore", null, 1)
         var selectdata = Selectclass(
             bookDetail!!.data.name,
             bookDetail!!.data.author,
