@@ -291,7 +291,9 @@ class ReadActivity :BaseActivity() {
 
     override fun initlistener() {
         super.initlistener()
-
+        selectbackground.setOnClickListener {
+            Toast.makeText(this,"自定义",Toast.LENGTH_SHORT).show()
+        }
         addfontsize.setOnClickListener {
             avi.show()
             lockscreen(true)
@@ -331,26 +333,26 @@ class ReadActivity :BaseActivity() {
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
-        colbule.setOnClickListener {
-            backgroundcolor="#A7FFEB"
+        colpick.setOnClickListener {
+            backgroundcolor="#FFCDD2"
 
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
         colgreen.setOnClickListener {
-            backgroundcolor="#B9F6CA"
+            backgroundcolor="#C8E6C9"
 
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
         colgreen_2.setOnClickListener {
-            backgroundcolor="#CCFF90"
+            backgroundcolor="#DCEDC8"
 
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
         colyellew.setOnClickListener {
-            backgroundcolor="#F4FF81"
+            backgroundcolor="#F0F4C3"
 
             Userdataupdata.updatauserdata(this)
             this.recreate()

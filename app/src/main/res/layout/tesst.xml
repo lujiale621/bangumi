@@ -197,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/colbule"
+                    android:id="@+id/colpick"
                     android:layout_gravity="center"
                     app:cardCornerRadius="50dp"
                     app:cardPreventCornerOverlap="true"
@@ -207,7 +207,7 @@
                     android:foreground = "?attr/selectableItemBackground"
                     >
                     <ImageView
-                        android:src="#A7FFEB"
+                        android:src="#FFCDD2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"/>
                 </androidx.cardview.widget.CardView>
@@ -227,7 +227,7 @@
                     android:foreground = "?attr/selectableItemBackground"
                     >
                     <ImageView
-                        android:src="#B9F6CA"
+                        android:src="#C8E6C9"
                         android:layout_width="30dp"
                         android:layout_height="30dp"/>
                 </androidx.cardview.widget.CardView>
@@ -248,7 +248,7 @@
                     android:foreground = "?attr/selectableItemBackground"
                     >
                     <ImageView
-                        android:src="#CCFF90"
+                        android:src="#DCEDC8"
                         android:layout_width="30dp"
                         android:layout_height="30dp"/>
                 </androidx.cardview.widget.CardView>
@@ -268,34 +268,37 @@
                     android:foreground = "?attr/selectableItemBackground"
                     >
                     <ImageView
-                        android:src="#F4FF81"
+                        android:src="#F0F4C3"
                         android:layout_width="30dp"
                         android:layout_height="30dp"/>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_weight="9"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round"
-                >
-                <TextView
-                    android:gravity="center"
+                <LinearLayout
+                    android:id="@+id/selectbackground"
+                    android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="自定义"
-                    android:textSize="20dp"
-                    android:textColor="#FF80AB"
-                    />
-            </LinearLayout>
-        </LinearLayout>
+                    android:background="@drawable/round"
+                    >
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="自定义"
+                        android:textSize="20dp"
+                        android:textColor="#FF80AB"
+                        />
+                </LinearLayout>
+
+
+        </RelativeLayout>
 
 
         </LinearLayout>
