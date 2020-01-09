@@ -67,7 +67,7 @@ class ReadActivity :BaseActivity() {
         setmenu.isVisible=false
         setliangdu.isVisible=false
         avi.show()
-        val mydrawable : Drawable = if (backgroundcolor[0].equals('#')){
+        val mydrawable : Drawable = if (backgroundcolor[0] == '#'){
             ColorDrawable(Color.parseColor(backgroundcolor))
         }else {
             Drawable.createFromPath(backgroundcolor)!!
@@ -319,10 +319,10 @@ class ReadActivity :BaseActivity() {
         //亮度监听
         liangduseekbar.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-             var window = this@ReadActivity.getWindow();
-             var layoutParams = window.getAttributes();
-                layoutParams.screenBrightness = progress/255.0f;
-                window.setAttributes(layoutParams);
+             var window = this@ReadActivity.window
+             var layoutParams = window.attributes;
+                layoutParams.screenBrightness = progress/255.0f
+                window.attributes = layoutParams
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
