@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/downloadbook"
+        android:icon="@drawable/icondown"
+        android:title="下载"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/listenbook"
+        android:icon="@drawable/iconlisten"
+        android:title="下载"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/fanye"
+        android:icon="@drawable/fanbook"
+        android:title="自动翻页"
+        app:showAsAction="never"
+        />
+</menu>

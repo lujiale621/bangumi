@@ -125,6 +125,8 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
     //点赞效果
     compile 'com.sackcentury:shinebutton:1.0.0'
+    //悬浮按钮
+    compile 'com.github.clans:fab:1.6.4'
    }
 
 

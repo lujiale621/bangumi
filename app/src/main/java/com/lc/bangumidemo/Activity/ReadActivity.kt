@@ -21,10 +21,6 @@ import android.view.animation.AnimationUtils
 import android.widget.ListView
 import com.lc.bangumidemo.KtUtil.*
 import com.lc.bangumidemo.R
-import com.lc.bangumidemo.Sqlite.NoveDatabase.BookIndexclass
-import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookselect
-import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookupdata
-import com.lc.bangumidemo.Sqlite.NoveDatabase.MyDatabaseHelper
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataupdata
 import io.reactivex.Observer
 import android.graphics.drawable.ColorDrawable
@@ -34,16 +30,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Handler
 import android.provider.Settings
+import android.speech.tts.TextToSpeech
+import android.view.Menu
 import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.core.app.ActivityCompat
+import androidx.core.os.postDelayed
 import com.lc.bangumidemo.Sqlite.CollectDatabase.*
+import com.lc.bangumidemo.Sqlite.NoveDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
 import org.jetbrains.anko.toast
 import java.util.*
 
-class ReadActivity :BaseActivity() {
+class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     lateinit var buttonback:Animation
     lateinit var buttonshow:Animation
     lateinit var toorbarshow:Animation
@@ -52,12 +53,19 @@ class ReadActivity :BaseActivity() {
     lateinit var leftmenuback:Animation
     var templist:MutableList<String> = mutableListOf()
      var adapt: ScanViewAdapter?=null
+    lateinit var runnable:Runnable
+    lateinit var handler:Handler
+    var isautoread=false
+    var isspeek=false
+
     companion object {
         var ismenushow=false
         var islistshow=false
         val PICTURE = 10086 //requestcode
         }
     lateinit var disposable: Disposable
+    //tts语言
+    lateinit var tts :TextToSpeech
 
     override fun setRes(): Int {
         return R.layout.tesst
@@ -70,6 +78,7 @@ class ReadActivity :BaseActivity() {
         //隐藏设置栏
         setmenu.isVisible=false
         setliangdu.isVisible=false
+        menufloat.isVisible=false
         avi.show()
         if(backgroundcolor.equals("#413F3F"))
         {
@@ -94,6 +103,19 @@ class ReadActivity :BaseActivity() {
             else
             {
                 seekbar.progress= temp.toInt()
+            }
+        }
+
+
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            var result = tts.setLanguage(Locale.CHINESE)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+            else {
+                //不支持中文就将语言设置为英文
+                tts.setLanguage(Locale.US);
             }
         }
     }
@@ -147,7 +169,36 @@ class ReadActivity :BaseActivity() {
         Bookselect.selectbookindex(this)
         //开始进行加载
         initloadbookdatatopage(this, bookDetail, hardpageindex)
-
+        handler=Handler()
+            runnable = Runnable{
+                if (isautoread) {
+                    click(1000, 500)
+                    lockscreen(false)
+                    handler.postDelayed(runnable, 6000);
+                }
+                if (isspeek){
+                    lockscreen(false)
+                    //查询索引信息
+                    var res=Bookselect.selectbookindex(this)
+                    if (res!=null) {
+                        var sult = Bookselect.selectbookindex(this)
+                        var i = MyDatabaseHelper(this, "bookstore", null, 1)
+                        var selectdata = Selectclass(
+                            bookDetail!!.data.name,
+                            bookDetail!!.data.author,
+                            bookDetail!!.list.size
+                        )
+                        //语音
+                        var resultnow = Bookselect.selectbookdata(i, selectdata, sult!!.pageindex)
+//                        if (returnsultpre != null) {
+//                            tts.speak(returnsultpre.bookdata,TextToSpeech.QUEUE_FLUSH,null)
+//                        }
+                        i.close()
+                    }
+                }
+        }
+        //初始化语言模块
+        tts=TextToSpeech(this,this)
         }
 
     fun initmyview() {
@@ -186,6 +237,9 @@ class ReadActivity :BaseActivity() {
                 ismenushow=false
                 closeothermenu()
                 lockscreen(false)
+                if(menufloat.isVisible){
+                    handler.postDelayed(runnable,0)
+                }
             }
 
             override fun onAnimationStart(animation: Animation?) {
@@ -199,14 +253,19 @@ class ReadActivity :BaseActivity() {
 
             override fun onAnimationEnd(animation: Animation?) {
                 lockscreen(false)
+
             }
 
             override fun onAnimationStart(animation: Animation?) {
                 lockscreen(true)
                 closeothermenu()
                 seakbar.isVisible=true
+                if(menufloat.isVisible){
+                    handler.removeCallbacks(runnable)
+                }
             }
         })
+
         mulu.setOnClickListener {
             readtoolbar.isVisible=false
             buttonmenu.isVisible=false
@@ -274,10 +333,13 @@ class ReadActivity :BaseActivity() {
         })
 
         //初始化阅读界面菜单
+        readtoolbar.overflowIcon= this.getDrawable(R.drawable.menulet)
         setSupportActionBar(readtoolbar)
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.iconback)
+
         //初始化目录
         for (temp in bookDetail!!.list)
         {
@@ -336,6 +398,17 @@ class ReadActivity :BaseActivity() {
     }
     override fun initlistener() {
         super.initlistener()
+        menu_start.setOnClickListener {
+            lockscreen(true)
+            handler.postDelayed(runnable,0)
+        }
+        menu_end.setOnClickListener { handler.removeCallbacks(runnable)
+        menufloat.isVisible=false
+            isautoread=false
+            isspeek=false
+            tts.stop()
+            tts.shutdown()
+        }
         collike.setOnClickListener {
             if(bookDetail!!.data.url!=null) {
                 var db = Collectdbhelper(this, "collect.db", null, 1)
@@ -414,7 +487,7 @@ class ReadActivity :BaseActivity() {
             avi.show()
             lockscreen(true)
             fontsize -= 1
-            if (fontsize<17){ fontsize=17}
+            if (fontsize<15){ fontsize=15}
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
@@ -430,7 +503,7 @@ class ReadActivity :BaseActivity() {
             avi.show()
             lockscreen(true)
             linesize -= 1
-            if(linesize<16){linesize=16}
+            if(linesize<12){linesize=12}
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
@@ -474,6 +547,14 @@ class ReadActivity :BaseActivity() {
         }
     }
 
+
+    private fun click(x:Int,y:Int) {
+        val order = listOf("input",
+            "tap",
+            "" + x,
+            "" + y)
+        ProcessBuilder(order).start()
+    }
     override fun onDestroy() {
         super.onDestroy()
         destoryandsave(this)
@@ -490,8 +571,39 @@ class ReadActivity :BaseActivity() {
                     destoryandsave(this)
                     finish()
                 }
+                R.id.fanye->{
+                    if(!isspeek)
+                    isautoread=true
+                    menufloat.isVisible=true
+                    }
+                R.id.downloadbook ->{}
+                R.id.listenbook ->{
+                    if(!isautoread)
+                    isspeek=true
+                    menufloat.isVisible=true
+                }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.readmenu, menu)
+        if (menu != null) {
+            if (menu.javaClass.simpleName.equals("MenuBuilder", ignoreCase = true)) {
+                try {
+                    val method = menu.javaClass.getDeclaredMethod(
+                        "setOptionalIconsVisible",
+                        java.lang.Boolean.TYPE
+                    )
+                    method.isAccessible = true
+                    method.invoke(menu, true)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+            }
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onRestart() {
