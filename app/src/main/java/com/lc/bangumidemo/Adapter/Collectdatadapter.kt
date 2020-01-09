@@ -13,6 +13,7 @@ import java.util.ArrayList
 import android.widget.TextView
 import com.lid.lib.LabelImageView
 import android.graphics.Bitmap
+import androidx.cardview.widget.CardView
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.lc.bangumidemo.KtUtil.gotoread
@@ -28,28 +29,32 @@ class Collectdatadapter(private val context: Context, private val collectlist: A
     }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var cover: LabelImageView?
+        var cardview:CardView
         var name:TextView
         val view = LayoutInflater.from(parent!!.context).inflate(R.layout.collectgriditem, parent, false)
         cover=view.findViewById(R.id.img_icon)
+        cardview=view.findViewById(R.id.cv)
         name=view.findViewById(R.id.colname)
         name.setText(collectlist[position].name)
         //
-        Glide.with(context)
-            .load(collectlist[position].cover)
-            .asBitmap()
-            .into(object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    glideAnimation: GlideAnimation<in Bitmap>
-                ) {
-                    //加载完成后的处理
-                    cover.setImageBitmap(resource)
-                    isnew(collectlist[position],cover)
-                }
-            })
+            Glide.with(context)
+                .load(collectlist[position].cover)
+                .asBitmap()
+                .into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        glideAnimation: GlideAnimation<in Bitmap>
+                    ) {
+                        //加载完成后的处理
+                        cover.setImageBitmap(resource)
+                    }
+                })
+
 //
         if(Clicklistener!=null){
-            cover.setOnClickListener { Clicklistener.onItemClick(collectlist[position]) }
+            cardview.setOnClickListener {
+                Clicklistener.onItemClick(collectlist[position])
+            }
         }
         return view
     }
@@ -58,7 +63,10 @@ class Collectdatadapter(private val context: Context, private val collectlist: A
         collectdataclass: Collectdataclass,
         cover: LabelImageView
     ) {
-        gotoread(collectdataclass,context,cover)
+        try {
+            gotoread(collectdataclass,context,cover)
+        }catch (e:Exception){}
+
     }
 
     override fun getItem(position: Int): Any {

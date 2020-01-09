@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.ViewPropertyAnimatorListener
-import com.lc.bangumidemo.KtUtil.fontsize
-import com.lc.bangumidemo.KtUtil.linesize
-import com.lc.bangumidemo.KtUtil.screenheight
-import com.lc.bangumidemo.KtUtil.screenwidth
+import com.lc.bangumidemo.KtUtil.*
 import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataclass
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdatahelper
@@ -39,14 +36,21 @@ class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
         var userdbhelper=Userdatahelper(this,"user.db",null,1)
         var result=Userdataselect.selectUserdata(userdbhelper)
         if(result==null){
-            Userdatainsert.insertuserdata(userdbhelper, Userdataclass(fontsize, linesize))
+            Userdatainsert.insertuserdata(userdbhelper, Userdataclass(fontsize, linesize,
+                userbackground,backgroundcolor))
         } else{
             fontsize=result.fontsize
             linesize=result.linesize
+            backgroundcolor=result.backgroundcolor
+            userbackground=result.mybackground
         }
         userdbhelper.close()
-
-        startActivity<MainActivity>()
+        if(isfirst) {
+            startActivity<IntroActivity>()
+        }else
+        {
+            startActivity<MainActivity>()
+        }
         finish()
     }
 

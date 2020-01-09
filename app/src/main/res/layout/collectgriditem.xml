@@ -5,6 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv"
+        android:clickable="true"
         android:layout_gravity="center"
         android:layout_width="90dp"
         android:layout_height="130dp"
@@ -15,13 +17,13 @@
         app:cardCornerRadius="5dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="false"
+
         >
         <com.lid.lib.LabelImageView
             android:id="@+id/img_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@drawable/searchbook"
             app:label_backgroundColor="#C2185B"
             app:label_orientation="RIGHT_TOP"
             app:label_textStyle="ITALIC"/>

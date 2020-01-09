@@ -1,10 +1,7 @@
 package com.lc.bangumidemo.Util
 
 import androidx.fragment.app.Fragment
-import com.lc.bangumidemo.Fragment.DymatFragment
-import com.lc.bangumidemo.Fragment.HomeFragment
-import com.lc.bangumidemo.Fragment.MineFragment
-import com.lc.bangumidemo.Fragment.ProcessFragment
+import com.lc.bangumidemo.Fragment.*
 import com.lc.bangumidemo.R
 
 class FragmentUtil private constructor(){
@@ -12,6 +9,8 @@ class FragmentUtil private constructor(){
     val processFragment by lazy { ProcessFragment() }
     val dymatFragment by lazy { DymatFragment() }
     val mineFragment by lazy { MineFragment() }
+    val introduceFragmentfirst by lazy { IntroduceFragmentfirst() }
+    val introduceFragmentsecond by lazy { IntroduceFragmentsecond() }
     companion object{
         val fragmentUtil by lazy{FragmentUtil()}
     }

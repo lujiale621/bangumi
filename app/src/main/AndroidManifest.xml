@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lc.bangumidemo">
-
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -34,6 +34,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.IntroActivity"
+            android:label="@string/define_appintro"
+            />
         <activity android:name=".Activity.MainActivity"></activity>
         <activity android:name=".Activity.Searchactivity"></activity>
         <activity android:name=".Activity.BookDetailActivity"></activity>

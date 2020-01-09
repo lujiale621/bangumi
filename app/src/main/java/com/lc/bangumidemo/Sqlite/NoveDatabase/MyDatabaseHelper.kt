@@ -17,8 +17,6 @@ class MyDatabaseHelper(
         db.execSQL(CREATE_BOOKINDEX)
         db.execSQL(CREATE_BOOKDATA)
         db.execSQL(CREATE_BOOKREAD)
-        Toast.makeText(mContext, "Create succeeded", Toast.LENGTH_SHORT).show()
-
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

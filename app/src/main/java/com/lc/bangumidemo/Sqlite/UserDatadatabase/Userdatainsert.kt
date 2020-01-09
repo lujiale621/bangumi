@@ -9,6 +9,8 @@ object Userdatainsert {
         //开始组装第一条数据
         values.put("fontsize", data.fontsize)
         values.put("linesize", data.linesize)
+        values.put("mybackground",data.mybackground)
+        values.put("backgroundcolor",data.backgroundcolor)
         db.insert("UserData", null, values)//插入第一条数据
         values.clear()//！！！！！
     }

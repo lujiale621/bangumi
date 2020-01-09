@@ -23,7 +23,7 @@ class MainActivity :BaseActivity(){
         super.initview()
         // 在调用init方法前设置自定义更新对话框布局
 
-        Bugly.init(getApplicationContext(), "c5ab2b04e8", false);
+        Bugly.init(getApplicationContext(), "23e079b718", false);
         icon=ImageView(this)
         icon.setImageResource(R.mipmap.menuleft)
         toolbar.addView(icon)

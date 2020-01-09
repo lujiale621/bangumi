@@ -3,8 +3,6 @@ package com.lc.bangumidemo.MyRetrofit.ResClass
 import android.content.Context
 import com.lc.bangumidemo.KtUtil.PagesizeUtil.getlinecount
 import com.lc.bangumidemo.KtUtil.fontsize
-import com.lc.bangumidemo.KtUtil.linesize
-import com.lc.bangumidemo.KtUtil.screenheight
 import com.lc.bangumidemo.KtUtil.screenwidth
 
 data class BookContent (
@@ -18,7 +16,7 @@ data class BookContent (
         for(i in content) {
             var cutbreak=i.replace(" ", "")
             cutbreak="　　"+cutbreak
-            var linecountsize=getlinecount(context, screenwidth, screenheight,fontsize,linesize)
+            var linecountsize=getlinecount(context, screenwidth, fontsize)
             var resec=(cutbreak.length+2)%linecountsize
             var addsize=linecountsize-resec+2
             if(addsize>=linecountsize){
