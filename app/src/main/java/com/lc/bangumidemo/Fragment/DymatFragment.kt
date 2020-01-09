@@ -42,10 +42,6 @@ class DymatFragment :BaseFragment() {
             override fun onItemClick(requestdata: Collectdataclass) {
                 lockscreen(true)
                 animcol.show()
-                Handler().postDelayed(Runnable {
-                    lockscreen(false)
-                    animcol.hide()
-                }, 10000)
                 gotoread(requestdata,mcontext,null)
             }
         })

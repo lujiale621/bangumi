@@ -141,6 +141,11 @@ class BookDetailActivity : BaseActivity() {
     fun loaddata(data: BookDetail?) {
         if (data == null) return
         bookDetail = data
+        var bundle = intent.extras
+        val url = bundle!!.getString("url")
+        if(url!=null){
+            bookDetail!!.data.url=url
+        }
         try {
             Glide.with(this).load(data.data.cover).into(bookcover)
         } catch (e: NullPointerException) {

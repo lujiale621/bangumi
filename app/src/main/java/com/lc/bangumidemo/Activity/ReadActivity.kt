@@ -35,6 +35,7 @@ import android.os.Build
 import android.provider.Settings
 import android.view.WindowManager
 import android.widget.SeekBar
+import com.lc.bangumidemo.Sqlite.CollectDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
 import org.jetbrains.anko.toast
 import java.util.*
@@ -309,6 +310,27 @@ class ReadActivity :BaseActivity() {
 
     override fun initlistener() {
         super.initlistener()
+        collike.setOnClickListener {
+            if(bookDetail!!.data.url!=null) {
+                var db = Collectdbhelper(this, "collect.db", null, 1)
+                var selectdata = Collectdataclass(
+                    bookDetail!!.data.name,
+                    bookDetail!!.data.author,
+                    bookDetail!!.list.size,
+                    bookDetail!!.data.time,
+                    "小说",
+                    bookDetail!!.data.cover,
+                    bookDetail!!.data.url
+                )
+                var result = CollectdataSelect.selectcollectdata(db, selectdata)
+                if (result == null) {
+                    CollectdataInsert.insertcollectdata(db, selectdata)
+                } else {
+                    CollectdataUpdata.updata(db, selectdata)
+                }
+                db.close()
+            }
+        }
         //倒序监听
         dore.setOnClickListener {
             templist.reverse()
