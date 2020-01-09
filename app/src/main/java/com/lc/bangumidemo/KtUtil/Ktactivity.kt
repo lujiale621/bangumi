@@ -3,6 +3,7 @@ package com.lc.bangumidemo.KtUtil
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import com.lc.bangumidemo.Activity.MhuaReadActivity
 import com.lc.bangumidemo.Activity.ReadActivity
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookDetail
@@ -32,6 +33,7 @@ var screenwidth=0      //初始屏幕宽度
 var screenheight=0    //初始屏幕高度
 var fontsize =23 //默认字体大小
 var linesize =16 //默认显示行数
+var pencolor = Color.parseColor("#000000")
 var position:Int=0
 var backgroundcolor:String="#ffffff"
 var userbackground:String="null"

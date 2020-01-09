@@ -214,12 +214,12 @@
                         android:layout_width="0dp"
                         android:layout_height="50dp"/>
                     <RelativeLayout
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:layout_gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
                         <LinearLayout
-                            android:id="@+id/sysliangdu"
+                            android:id="@+id/yejian"
                             android:layout_gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -230,9 +230,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="系统"
+                                android:text="夜间"
                                 android:textSize="20dp"
-                                android:textColor="#FF80AB"
+                                android:textColor="#FFFFFF"
                                 />
                         </LinearLayout>
 

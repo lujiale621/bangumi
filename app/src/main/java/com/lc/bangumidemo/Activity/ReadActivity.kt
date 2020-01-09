@@ -1,5 +1,6 @@
 package com.lc.bangumidemo.Activity
 
+import android.Manifest
 import android.app.Activity
 import android.graphics.Color
 import android.util.Log
@@ -30,11 +31,13 @@ import android.graphics.drawable.ColorDrawable
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.provider.Settings
 import android.view.WindowManager
 import android.widget.SeekBar
+import androidx.core.app.ActivityCompat
 import com.lc.bangumidemo.Sqlite.CollectDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
 import org.jetbrains.anko.toast
@@ -68,6 +71,12 @@ class ReadActivity :BaseActivity() {
         setmenu.isVisible=false
         setliangdu.isVisible=false
         avi.show()
+        if(backgroundcolor.equals("#413F3F"))
+        {
+            pencolor=Color.parseColor("#ffffff")
+        }else{
+            pencolor=Color.parseColor("#000000")
+        }
         val mydrawable : Drawable = if (backgroundcolor[0] == '#'){
             ColorDrawable(Color.parseColor(backgroundcolor))
         }else {
@@ -307,7 +316,24 @@ class ReadActivity :BaseActivity() {
             }
         }
     }
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == MainActivity.REQUEST_PERMISSION_CODE) {
+            var tempint=0
+            for(i in permissions)
+            {
+                Log.i("ReadActivity", "申请的权限为：" + i + ",申请结果：" + grantResults[tempint]);
+                if(grantResults[tempint]==-1){
+                    toast("未启用权限的部分功能将无法使用。").show()
+                }
+                tempint++
+            }
+        }
+    }
     override fun initlistener() {
         super.initlistener()
         collike.setOnClickListener {
@@ -354,15 +380,27 @@ class ReadActivity :BaseActivity() {
                  }
         })
         selectbackground.setOnClickListener {
-            val intent = Intent()
-            if (Build.VERSION.SDK_INT < 19) {//因为Android SDK在4.4版本后图片action变化了 所以在这里先判断一下
-                intent.action = Intent.ACTION_GET_CONTENT
-            } else {
-                intent.action = Intent.ACTION_OPEN_DOCUMENT
+            //检查是否申请权限
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                        MainActivity.PERMISSIONS_STORAGE,
+                        MainActivity.REQUEST_PERMISSION_CODE
+                    )
+                }else{
+                    val intent = Intent()
+                    if (Build.VERSION.SDK_INT < 19) {//因为Android SDK在4.4版本后图片action变化了 所以在这里先判断一下
+                        intent.action = Intent.ACTION_GET_CONTENT
+                    } else {
+                        intent.action = Intent.ACTION_OPEN_DOCUMENT
+                    }
+                    intent.type = "image/*"
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    startActivityForResult(intent, PICTURE)
+                }
             }
-            intent.type = "image/*"
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            startActivityForResult(intent, PICTURE)
+
+
         }
         addfontsize.setOnClickListener {
             avi.show()
@@ -396,6 +434,11 @@ class ReadActivity :BaseActivity() {
             Userdataupdata.updatauserdata(this)
             this.recreate()
         }
+        yejian.setOnClickListener {
+            backgroundcolor="#413F3F"
+            Userdataupdata.updatauserdata(this)
+            this.recreate()
+        }
         //设置背景颜色
         colwrite.setOnClickListener {
             backgroundcolor="#FFFFFF"
@@ -423,9 +466,11 @@ class ReadActivity :BaseActivity() {
             this.recreate()
         }
         custombackground.setOnClickListener {
-            backgroundcolor= userbackground
-            Userdataupdata.updatauserdata(this)
-            this.recreate()
+            if (!userbackground.equals("null")) {
+                backgroundcolor = userbackground
+                Userdataupdata.updatauserdata(this)
+                this.recreate()
+            }
         }
     }
 
