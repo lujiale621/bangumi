@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.DrawFilter
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.graphics.drawable.DrawableCompat
 
 import com.lc.bangumidemo.KtUtil.*
 import com.lc.bangumidemo.Myreadview.Pageview
@@ -65,7 +67,12 @@ class ScanViewAdapter(
             startindex.pagecount
         )
         this.startindex = startindex
-        val mydrawable = ColorDrawable(Color.parseColor(backgroundcolor))
+        val mydrawable :Drawable = if (backgroundcolor[0].equals('#')){
+            ColorDrawable(Color.parseColor(backgroundcolor))
+        }else {
+            Drawable.createFromPath(backgroundcolor)!!
+        }
+        mydrawable.setBounds(0,0, screenwidth, screenheight)
         setbkcolor(mydrawable)
     }
         fun setonPageclickListener(view: ScanView,onpageclick: ScanView.OnpageClick){

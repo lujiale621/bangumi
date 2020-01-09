@@ -29,6 +29,7 @@ class Userdatahelper(
                 + "id integer primary key autoincrement, "
                 + "fontsize integer, "
                 + "linesize integer, "
+                + "mybackground text, "
                 + "backgroundcolor text)"
                 )
 

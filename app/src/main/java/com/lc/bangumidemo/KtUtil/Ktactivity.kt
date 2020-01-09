@@ -3,7 +3,6 @@ package com.lc.bangumidemo.KtUtil
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.core.content.ContextCompat.startActivity
 import com.lc.bangumidemo.Activity.MhuaReadActivity
 import com.lc.bangumidemo.Activity.ReadActivity
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookDetail
@@ -35,7 +34,7 @@ var fontsize =23 //默认字体大小
 var linesize =16 //默认显示行数
 var position:Int=0
 var backgroundcolor:String="#ffffff"
-
+var userbackground:String="null"
 var hardpageindex=0
 var hardcontentindex=0
 
@@ -51,12 +50,16 @@ object PagesizeUtil{
         return getcount(
             context,
             screenwidth,
-            screenheight,
             fontsize,
             lintcount
         )
     }
-    fun getcount(context: Context, width: Int, height: Int, fontsize: Int, lincount: Int): Int {
+    fun getcount(
+        context: Context,
+        width: Int,
+        fontsize: Int,
+        lincount: Int
+    ): Int {
 
         val st = "吖"
         val si = cal(fontsize, context)
@@ -68,7 +71,11 @@ object PagesizeUtil{
             cuttxtt(st, linecount, linesize)//返回加载多少个字能填满一行
         return lincount * count
     }
-    fun getlinecount(context: Context, width: Int, height: Int, fontsize: Int, lincount: Int): Int {
+    fun getlinecount(
+        context: Context,
+        width: Int,
+        fontsize: Int
+    ): Int {
 
         val st = "吖"
         val si = cal(fontsize, context)

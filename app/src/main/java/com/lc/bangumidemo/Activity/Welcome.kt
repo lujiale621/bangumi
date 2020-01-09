@@ -36,11 +36,13 @@ class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
         var userdbhelper=Userdatahelper(this,"user.db",null,1)
         var result=Userdataselect.selectUserdata(userdbhelper)
         if(result==null){
-            Userdatainsert.insertuserdata(userdbhelper, Userdataclass(fontsize, linesize,backgroundcolor))
+            Userdatainsert.insertuserdata(userdbhelper, Userdataclass(fontsize, linesize,
+                userbackground,backgroundcolor))
         } else{
             fontsize=result.fontsize
             linesize=result.linesize
             backgroundcolor=result.backgroundcolor
+            userbackground=result.mybackground
         }
         userdbhelper.close()
 
