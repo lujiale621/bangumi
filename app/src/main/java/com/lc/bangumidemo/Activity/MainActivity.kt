@@ -1,8 +1,12 @@
 package com.lc.bangumidemo.Activity
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 
@@ -13,10 +17,24 @@ import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.app_bar_base.*
 import kotlinx.android.synthetic.main.mainlayout.*
+import org.jetbrains.anko.toast
 
 
 class MainActivity :BaseActivity(){
     lateinit var icon:ImageView
+    companion object{
+
+        val PERMISSIONS_STORAGE = arrayOf(
+
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        //请求状态码
+
+        val REQUEST_PERMISSION_CODE = 1
+
+
+    }
     override fun setRes(): Int { return R.layout.mainlayout }
 
     override fun initview() {
@@ -33,8 +51,32 @@ class MainActivity :BaseActivity(){
         navigationView.setItemIconTintList(null);
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            var tempint=0
+            for(i in permissions)
+            {
+                Log.i("MainActivity", "申请的权限为：" + i + ",申请结果：" + grantResults[tempint]);
+                if(grantResults[tempint]==-1){
+                    toast("未启用权限的部分功能将无法使用。").show()
+                }
+                tempint++
+            }
+         }
+    }
+
     override fun initaction() {
         super.initaction()
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE)
+            }
+        }
 
     }
 

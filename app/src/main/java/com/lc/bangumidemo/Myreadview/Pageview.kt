@@ -5,11 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-
-import com.lc.bangumidemo.KtUtil.fontsize
-import com.lc.bangumidemo.KtUtil.linesize
-import com.lc.bangumidemo.KtUtil.screenheight
-import com.lc.bangumidemo.KtUtil.screenwidth
+import com.lc.bangumidemo.KtUtil.*
 
 import java.util.ArrayList
 
@@ -36,6 +32,7 @@ class Pageview : View {
             val pen = Paint()
             val fontsize = calcFontSize(fontsize).toFloat()
             pen.textSize = fontsize
+            pen.setColor(pencolor)
             val wid = fontsize * content!!.length
             val widthsub = mywidth - fontsize
             val linecount = (wid / widthsub).toInt() + 1
