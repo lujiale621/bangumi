@@ -76,6 +76,8 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.71.android'
     //card
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+    //引导页
+    implementation 'com.github.AppIntro:AppIntro:5.1.0'
 
 
     //cardview

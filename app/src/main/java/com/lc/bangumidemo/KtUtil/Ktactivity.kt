@@ -20,7 +20,7 @@ import retrofit2.Response
 
 import java.util.ArrayList
 
-
+var isfirst:Boolean=false//是否第一次启动
 var bookDetail : BookDetail?=null
 var mhuaDetail : ManhuaDetailResult?=null
 var imglist : MutableList<Bitmap> = ArrayList<Bitmap>()

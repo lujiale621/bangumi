@@ -45,8 +45,12 @@ class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
             userbackground=result.mybackground
         }
         userdbhelper.close()
-
-        startActivity<MainActivity>()
+        if(isfirst) {
+            startActivity<IntroActivity>()
+        }else
+        {
+            startActivity<MainActivity>()
+        }
         finish()
     }
 
