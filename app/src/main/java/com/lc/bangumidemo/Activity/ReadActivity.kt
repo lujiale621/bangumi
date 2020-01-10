@@ -217,6 +217,9 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         Rxrecive(5)//注册语言播放
         //查询索引信息
         Bookselect.selectbookindex(this)
+
+        destoryandsave(this)
+        //
         //开始进行加载
         initloadbookdatatopage(this, bookDetail, hardpageindex)
         handler=Handler()
@@ -508,8 +511,9 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                           } catch (e: Exception) {
                             var intent =
                             Intent(this@ReadActivity, ErrorActivity::class.java)
-                            intent.putExtra("msg", "无效的书源")
-                            intent.putExtra("tag", "ReadActivitysearchbooksource")
+                            intent.putExtra("msg", e.toString())
+                            intent.putExtra("error","getbookdata")
+                            intent.putExtra("tag", "ReadActivity")
                             anmoread.hide()
                             startActivity(intent)
                         }

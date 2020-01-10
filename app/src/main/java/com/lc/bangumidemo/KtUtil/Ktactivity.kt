@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import com.lc.bangumidemo.Activity.MhuaReadActivity
 import com.lc.bangumidemo.Activity.ReadActivity
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookDetail
@@ -20,6 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 import java.util.ArrayList
+import kotlin.math.log
 
 var isfirst:Boolean=false//是否第一次启动
 var bookDetail : BookDetail?=null
@@ -169,7 +171,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
             val call = Retrofitcall().getAPIServerdetail().getCall(requestdata.url )
             call.enqueue(object : Callback<BookDetail> {
                 override fun onFailure(call: Call<BookDetail>, t: Throwable) {
-                    println("连接失败")
+                    Log.e("gotoread","连接失败")
                 }
 
                 override fun onResponse(
@@ -184,8 +186,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                             var intent = Intent(context, ReadActivity::class.java)
                             context.startActivity(intent)
                         } catch (e: Exception) {
-                            print("此书已失效")
-
+                            Log.e("gotoread","此书已失效")
                         }
                     }else{
                         var db = Collectdbhelper(context, "collect.db", null, 1)
@@ -239,7 +240,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                     }
                     override fun onError(code: Int, msg: String?) {
                         super.onError(code, msg)
-                        print("此书已失效")
+                        Log.e("gotoread","此书已失效")
                     }
                 })
             }}

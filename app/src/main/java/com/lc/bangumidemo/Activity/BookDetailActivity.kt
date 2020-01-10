@@ -108,8 +108,8 @@ class BookDetailActivity : BaseActivity() {
                     loadlist(st)
                 } catch (e: Exception) {
                     var intent = Intent(this@BookDetailActivity, ErrorActivity::class.java)
-                    intent.putExtra("msg","书本信息无法请求")
-                    intent.putExtra("error",e.message)
+                    intent.putExtra("msg",e.toString())
+                    intent.putExtra("error","initaction")
                     intent.putExtra("tag","BookDetailActivity")
                     startActivity(intent)
                 }

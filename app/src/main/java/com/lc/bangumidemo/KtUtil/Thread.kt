@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import com.lc.bangumidemo.Activity.ErrorActivity
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookContent
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookDetail
@@ -66,9 +67,9 @@ fun loadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: Bo
                         db.close()
                     }catch (e:Exception){
                         var intent = Intent(context, ErrorActivity::class.java)
-                        intent.putExtra("msg","网络错误")
-                        intent.putExtra("error",e.message)
-                        intent.putExtra("tag","Threadkt_loadbookdatatopage")
+                        intent.putExtra("msg",e.toString())
+                        intent.putExtra("error","loadbookdatatopage")
+                        intent.putExtra("tag","Threadkt")
                         context.startActivity(intent)
                     }
 
@@ -90,7 +91,7 @@ fun loadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: Bo
                 }
 
                 override fun onFailure(call: Call<BookContent>, t: Throwable) {
-                    println("连接失败")
+                    Log.e("loadbookdatatopage","连接失败")
                     message.obj = null
                     message.what = 2
                     mHamdler1.sendMessage(message)
@@ -99,9 +100,9 @@ fun loadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: Bo
             })
         }catch (e:Exception){
             var intent = Intent(context, ErrorActivity::class.java)
-            intent.putExtra("msg","网络错误或无效的书本信息企图去加载")
-            intent.putExtra("error",e.message)
-            intent.putExtra("tag","Threadkt_loadbookdatatopage")
+            intent.putExtra("msg",e.toString())
+            intent.putExtra("error","loadbookdatatopage")
+            intent.putExtra("tag","Threadkt")
             context.startActivity(intent)
         }
     }).start()
@@ -162,9 +163,9 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
                         }
                     }catch (e:Exception){
                         var intent = Intent(context, ErrorActivity::class.java)
-                        intent.putExtra("msg","网络错误")
-                        intent.putExtra("error",e.message)
-                        intent.putExtra("tag","Threadkt_toloadbookdatatopage")
+                        intent.putExtra("msg",e.toString())
+                        intent.putExtra("error","toloadbookdatatopage")
+                        intent.putExtra("tag","Threadkt")
                         context.startActivity(intent)
                     }
 
@@ -185,7 +186,7 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
                     mHamdler1.sendMessage(message)
                 }
                 override fun onFailure(call: Call<BookContent>, t: Throwable) {
-                    println("连接失败")
+                    Log.e("toloadbookdatatopage","连接失败")
                     message.obj=null
                     message.what=2
                     mHamdler1.sendMessage(message)
@@ -194,9 +195,9 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
             })
         }catch (e:Exception){
             var intent = Intent(context, ErrorActivity::class.java)
-            intent.putExtra("msg","无效的书本信息企图去加载")
-            intent.putExtra("error",e.message)
-            intent.putExtra("tag","Threadkt_toloadbookdatatopage")
+            intent.putExtra("msg",e.toString())
+            intent.putExtra("error","toloadbookdatatopage")
+            intent.putExtra("tag","Threadkt")
             context.startActivity(intent)
         }
     }).start()
@@ -236,9 +237,9 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
                         RxBus.getInstance().send(0, RxBusBaseMessage(0,"initpage"))
                     }catch (e:Exception){
                         var intent = Intent(context, ErrorActivity::class.java)
-                        intent.putExtra("msg","网络错误")
-                        intent.putExtra("error",e.message)
-                        intent.putExtra("tag","Threadkt_initloadbookdatatopage")
+                        intent.putExtra("msg",e.toString())
+                        intent.putExtra("error","initloadbookdatatopage")
+                        intent.putExtra("tag","Threadkt")
                         context.startActivity(intent)
                     }
                 }
@@ -259,7 +260,7 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
                 }
                 override fun onFailure(call: Call<BookContent>, t: Throwable) {
 
-                    println("连接失败")
+                    Log.e("initloadbookdatatopage","连接失败")
                     message.obj=null
                     message.what=2
                     mHamdler1.sendMessage(message)
@@ -268,9 +269,9 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
             })
         }catch (e:Exception){
             var intent = Intent(context, ErrorActivity::class.java)
-            intent.putExtra("msg","网络错误或无效的书本信息企图去加载")
-            intent.putExtra("error",e.message)
-            intent.putExtra("tag","Threadkt_initloadbookdatatopage")
+            intent.putExtra("msg",e.toString())
+            intent.putExtra("error","initloadbookdatatopage")
+            intent.putExtra("tag","Threadkt")
             context.startActivity(intent)
         }
 
