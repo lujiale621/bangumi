@@ -63,6 +63,7 @@ fun loadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: Bo
                                 end
                             )
                         }
+                        db.close()
                     }catch (e:Exception){
                         var intent = Intent(context, ErrorActivity::class.java)
                         intent.putExtra("msg","网络错误")
@@ -142,6 +143,7 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
                                 start,
                                 end
                             )
+                            db.close()
                             RxBus.getInstance().send(2, RxBusBaseMessage(2,"finishmap"))
                         }
                         else {
@@ -152,6 +154,7 @@ fun toloadbookdatatopage(context:Context, book: BookDetail?, positon:Int, data: 
                                 start,
                                 end
                             )
+                            db.close()
                             if(data.pageindex==0)
                             {
                                 RxBus.getInstance().send(2, RxBusBaseMessage(2,"finishmap"))
@@ -229,6 +232,7 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
                             bookDetail!!.list.size, positon
                         )
                         Bookinsert.insertbookdata(db,bookdatacls)
+                        db.close()
                         RxBus.getInstance().send(0, RxBusBaseMessage(0,"initpage"))
                     }catch (e:Exception){
                         var intent = Intent(context, ErrorActivity::class.java)

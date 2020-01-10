@@ -63,7 +63,7 @@ class Searchactivity : BaseActivity() {
 
         searchView = searchItem.actionView as SearchView
         searchView!!.isSubmitButtonEnabled = false // 提交按钮
-        searchView!!.queryHint = "少年, 要来个兔子么"
+        searchView!!.queryHint = "点击搜索相关内容"
         searchView!!.onActionViewExpanded()
         searchView!!.isIconified = false
         searchView!!.clearFocus() // 收起键盘

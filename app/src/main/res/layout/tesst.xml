@@ -67,13 +67,13 @@
         android:layout_height="100dp"
         android:layout_alignTop="@+id/pageview"
         android:background="#BF000000" />
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_centerInParent="true"
         android:gravity="right|center"
+        android:layout_centerInParent="true"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="5dp"
         >
@@ -121,10 +121,10 @@
             fab:menu_showShadow="true">
 
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_set"
+                android:id="@+id/menu_hide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/exesetpng"
+                android:src="@drawable/hide"
                 fab:fab_label="Menu item 1"
                 fab:fab_size="mini"/>
             <com.github.clans.fab.FloatingActionButton
@@ -143,13 +143,15 @@
                 fab:fab_size="mini" />
 
         </com.github.clans.fab.FloatingActionMenu>
-    </LinearLayout>
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/buttonmenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/pageview"
         android:orientation="vertical">
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -169,6 +171,36 @@
                 app:siShape="@raw/heart"
                 android:elevation="10dp"/>
         </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/huanyuanlayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#BF000000"
+            >
+            <com.wang.avi.AVLoadingIndicatorView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:visibility="visible"
+                app:indicatorColor="#80D8FF"
+                app:indicatorName="TriangleSkewSpinIndicator"
+                android:id="@+id/anmoread"
+                />
+            <TextView
+              android:layout_above="@+id/huanyuanlist"
+                 android:gravity="center"
+                android:id="@+id/sourcesize"
+                android:textColor="#80DEEA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                />
+           <ListView
+               android:id="@+id/huanyuanlist"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               />
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/seakbar"
             android:layout_width="match_parent"
@@ -206,6 +238,7 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/setmenu"
             android:layout_width="match_parent"
@@ -547,7 +580,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_width="60dp"
         android:layout_height="60dp"

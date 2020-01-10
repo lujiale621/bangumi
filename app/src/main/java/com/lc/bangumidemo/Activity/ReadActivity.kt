@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.animation.Animation
-import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import com.lc.bangumidemo.Adapter.ScanViewAdapter
@@ -18,7 +17,6 @@ import com.trello.rxlifecycle3.android.lifecycle.kotlin.bindUntilEvent
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.tesst.*
 import android.view.animation.AnimationUtils
-import android.widget.ListView
 import com.lc.bangumidemo.KtUtil.*
 import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataupdata
@@ -28,21 +26,32 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
+import android.os.Message
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.Menu
-import android.widget.SeekBar
+import android.view.MotionEvent
+import android.widget.*
 import androidx.core.app.ActivityCompat
+import com.lc.bangumidemo.Adapter.Recadapt
+import com.lc.bangumidemo.MyRetrofit.ResClass.BookResult
+import com.lc.bangumidemo.MyRetrofit.ResClass.Bookdata
+import com.lc.bangumidemo.MyRetrofit.Retrofit.Retrofitcall
 import com.lc.bangumidemo.Sqlite.CollectDatabase.*
 import com.lc.bangumidemo.Sqlite.NoveDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
+import kotlinx.android.synthetic.main.search.*
 import org.jetbrains.anko.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
      var nowindex: BookIndexclass? = null
-
+    var novesourcelist: MutableList<Bookdata> = mutableListOf()//小说列表
     lateinit var buttonback:Animation
     lateinit var buttonshow:Animation
     lateinit var toorbarshow:Animation
@@ -50,6 +59,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     lateinit var leftmenushow:Animation
     lateinit var leftmenuback:Animation
     var templist:MutableList<String> = mutableListOf()
+    var templistdefult:MutableList<String> = mutableListOf()
      var adapt: ScanViewAdapter?=null
     lateinit var runnable:Runnable
     lateinit var handler:Handler
@@ -77,7 +87,23 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         setmenu.isVisible=false
         setliangdu.isVisible=false
         menufloat.isVisible=false
+        huanyuanlayout.isVisible=false
+        anmoread.hide()
         avi.show()
+        //设置悬浮按钮
+        menufloat.menuButtonColorNormal=Color.parseColor("#80DEEA")
+        menufloat.menuButtonColorPressed=Color.parseColor("#80CBC4")
+        menufloat.menuButtonColorRipple=Color.parseColor("#99FFFFFF")
+        menu_hide.colorNormal=Color.parseColor("#80DEEA")
+        menu_hide.colorPressed=Color.parseColor("#80CBC4")
+        menu_hide.colorRipple=Color.parseColor("#99FFFFFF")
+        menu_start.colorNormal=Color.parseColor("#80DEEA")
+        menu_start.colorPressed=Color.parseColor("#80CBC4")
+        menu_start.colorRipple=Color.parseColor("#99FFFFFF")
+        menu_end.colorNormal=Color.parseColor("#80DEEA")
+        menu_end.colorPressed=Color.parseColor("#80CBC4")
+        menu_end.colorRipple=Color.parseColor("#99FFFFFF")
+
         if(backgroundcolor.equals("#413F3F"))
         {
             pencolor=Color.parseColor("#ffffff")
@@ -156,6 +182,11 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                         Log.i("bookindex-info-contentindex", nowindex!!.contentindex.toString())
                         Log.i("bookindex-info-hardcontentindex", nowindex!!.hardcontentindex.toString())
                         Log.i("bookindex-info-hardpageindex", nowindex!!.hardpageindex.toString())
+                        list.choiceMode=ListView.CHOICE_MODE_SINGLE
+                        list.setSelected(true);
+                        list.setSelection(nowindex!!.pageindex)
+                        list.setItemChecked(nowindex!!.pageindex,true)
+
                     }
                     if (t.code == 5) {
                         Log.e("RXJAVA", "播放语音")
@@ -223,9 +254,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                             })
                              mParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"messageID")
                              RxBus.getInstance().send(5, RxBusBaseMessage(5,"null"))
-
-
-
                 }
         }
           }
@@ -291,6 +319,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         })
 
         mulu.setOnClickListener {
+            closeothermenu()
             readtoolbar.isVisible=false
             buttonmenu.isVisible=false
             ismenushow=false
@@ -308,17 +337,31 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
             closeothermenu()
             setliangdu.isVisible=true
         }
-        list.setOnItemClickListener { _, _, position, _ ->
+        list.setOnItemClickListener { v1, v2, position, v3 ->
             lockscreen(true)
+            var isdaoxu=false
+            //检查是否倒序
+            if(v2 is TextView){
+                Log.i("text:",v2.text.toString())
+                if(!v2.text.toString().equals(templistdefult[position])){
+                    isdaoxu=true
+                }
+            }
             var db = MyDatabaseHelper(this, "bookstore", null, 1)
+            var temposition=0
+            if(!isdaoxu){
+                temposition=position
+            }else{
+                temposition=bookDetail!!.list.size-position-1
+            }
             var updata = BookIndexclass(
                 null,
                 bookDetail!!.data.author,
                 bookDetail!!.data.name,
-                position,
+                temposition,
                 0,
                 bookDetail!!.list.size,
-                position,
+                temposition,
                 0
             )
             Bookupdata.updata(db, updata)
@@ -332,10 +375,10 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         adapt?.let { pageview.setAdapter(it) }
         adapt?.setonPageclickListener(pageview,object :ScanView.OnpageClick{
             override fun onItemClick() {
-                when(ismenushow){
+               when(ismenushow){
                     true->{
-                          buttonmenu.startAnimation(buttonback)
-                          readtoolbar.startAnimation(toorbarback)
+                        buttonmenu.startAnimation(buttonback)
+                        readtoolbar.startAnimation(toorbarback)
 
                     }
                     false->{
@@ -346,14 +389,18 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                         readtoolbar.startAnimation(toorbarshow)
                     }
                 }
-                when(islistshow){
-                    true->{
-                        leftmenu.isVisible=false
-                        islistshow=false
+                    when(islistshow){
+                        true->{
+                            leftmenu.isVisible=false
+                            islistshow=false
+                        }
                     }
+                if(isautoread||isspeek){
+                    menufloat.isVisible=true
                 }
-
             }
+
+
         })
 
         //初始化阅读界面菜单
@@ -368,6 +415,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         for (temp in bookDetail!!.list)
         {
             templist.add(temp.num)
+            templistdefult.add(temp.num)
         }
         var arrayAdapter=ArrayAdapter<String>(this,R.layout.textview,templist)
         list.adapter=arrayAdapter
@@ -378,14 +426,107 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         list.setSelection(sult!!.hardpageindex)
         list.setItemChecked(sult.hardpageindex,true)
         tab.setTitle("   "+ bookDetail!!.data.name)
+        //初始化书源
 
+    }
+    fun searchbooksource(){
+        var tempsourcelist:MutableList<String> = mutableListOf<String>()
+        var i=0
+        for(ie in novesourcelist){
+                tempsourcelist.add("书名:"+ie.name+" 新:"+ie.num+" 时间:"+ie.time)
+                i++
+        }
+        sourcesize.setText("已搜索到：$i"+"个类似书源")
+        var sourceadapter=ArrayAdapter<String>(this,R.layout.sourcetextview, tempsourcelist)
+        huanyuanlist.adapter=sourceadapter
+    }
+    fun searchbook(name: String?) {
+        anmoread.show()
+        novesourcelist.clear()
+        val mHamdler1 = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                when (msg.what) {
+                    2 -> {
+                        try {
+                            var result = msg.obj as BookResult
+                            if (result != null) {
+                                anmoread.hide()
+                                if (result.list==null){throw NullPointerException()}
+                                getbookdata(result)
+                            }
+                        } catch (e: Exception) {
+                            anmoread.hide()
+                            Toast.makeText(this@ReadActivity,"搜索不到相关资源~",Toast.LENGTH_SHORT).show()
+                        }
 
+                    }
+                }
+            }
+        }
+        Thread(Runnable {
+            var message = Message()
+            val call = name?.let { Retrofitcall().getAPIService().getCall(it) }
+            if (call != null) {
+                call.enqueue(object : Callback<BookResult> {
+                    override fun onResponse(
+                        call: Call<BookResult>,
+                        response: Response<BookResult>
+                    ) {
+                        val st = response.body()
+                        println(st)
+                        message.obj = st
+                        message.what = 2
+                        mHamdler1.sendMessage(message)
+                    }
 
+                    override fun onFailure(call: Call<BookResult>, t: Throwable) {
+                        anmoread.hide()
+                        Toast.makeText(this@ReadActivity,"网络连接失败~",Toast.LENGTH_SHORT).show()
+                        message.obj = null
+                        message.what = 2
+                        mHamdler1.sendMessage(message)
+                    }
+                })
+            }
+        }).start()
+    }
+
+    fun getbookdata(result: BookResult) {
+
+        val hand = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                when (msg.what) {
+
+                    3 -> {
+                        try {
+                            for (i in result!!.list) {
+                                novesourcelist.add(i)
+                            }
+                            searchbooksource()
+                          } catch (e: Exception) {
+                            var intent =
+                            Intent(this@ReadActivity, ErrorActivity::class.java)
+                            intent.putExtra("msg", "无效的书源")
+                            intent.putExtra("tag", "ReadActivitysearchbooksource")
+                            anmoread.hide()
+                            startActivity(intent)
+                        }
+
+                    }
+                }
+            }
+        }
+        Thread(Runnable {
+            hand.sendEmptyMessage(3)
+        }).start()
     }
     private fun closeothermenu(){
         setmenu.isVisible=false
         setliangdu.isVisible=false
         seakbar.isVisible=false
+        huanyuanlayout.isVisible=false
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -422,15 +563,39 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     }
     override fun initlistener() {
         super.initlistener()
+        huanyuanlist.setOnItemClickListener { parent, view, position, id ->
+            var urls = novesourcelist[position].url
+            if (urls != null) {
+                var start = Intent(this, BookDetailActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("url", urls)
+                bundle.putInt("position", position)
+                start.putExtras(bundle)
+                this.finish()
+                startActivity(start)
+            }
+        }
+        huanyuan.setOnClickListener {
+            closeothermenu()
+            huanyuanlayout.isVisible=true
+            searchbook(bookDetail!!.data.name)
+        }
+        menu_hide.setOnClickListener {
+            menufloat.isVisible=false
+        }
         menu_start.setOnClickListener {
             lockscreen(true)
+            menufloat.alpha=0.3f
+            menufloat.close(true)
             handler.postDelayed(runnable,0)
         }
         menu_end.setOnClickListener { handler.removeCallbacks(runnable)
-        menufloat.isVisible=false
             isautoread=false
             isspeek=false
             tts.stop()
+            menufloat.alpha=1f
+            menufloat.close(true)
+            menufloat.isVisible=false
         }
         collike.setOnClickListener {
             if(bookDetail!!.data.url!=null) {
@@ -457,6 +622,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         dore.setOnClickListener {
             templist.reverse()
             (list.adapter as ArrayAdapter<String>).notifyDataSetChanged()
+
         }
         //刷新监听
         fleshbutton.setOnClickListener {  }
@@ -618,14 +784,27 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 }
                 R.id.fanye->{
                     if(!isspeek)
-                    isautoread=true
-                    menufloat.isVisible=true
+                    {
+                        isautoread=true
+                        menufloat.isVisible=true
+                    }else{
+                        isspeek=false
+                        isautoread=true
+                        menufloat.isVisible=true
+                    }
+
                     }
                 R.id.downloadbook ->{}
                 R.id.listenbook ->{
-                    if(!isautoread)
-                    isspeek=true
-                    menufloat.isVisible=true
+                    if(!isautoread) {
+                        isspeek = true
+                        menufloat.isVisible = true
+                    }else{
+                        isautoread=false
+                        isspeek = true
+                        menufloat.isVisible = true
+
+                    }
                 }
         }
         return super.onOptionsItemSelected(item)
@@ -656,4 +835,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         //查询索引信息
         Bookselect.selectbookindex(this)
     }
+
+
+
 }

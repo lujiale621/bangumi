@@ -195,6 +195,7 @@ fun InitMapupdata(context: Context, data: BookIndexclass) {
             }
         }
         i.close()
+    db.close()
 }
 
 fun Mapupdata(context: Context, data: BookIndexclass) {
@@ -262,6 +263,7 @@ fun Mapupdata(context: Context, data: BookIndexclass) {
         }
     }
     i.close()
+    db.close()
 }
 fun updatapre(context: Context, data: BookIndexclass, selectclass: Selectclass, start:Int, end:Int){
     var db = MyDatabaseHelper(context, "bookstore", null, 1)
