@@ -1,7 +1,7 @@
 package com.lc.bangumidemo.Activity
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.util.Log
 import android.view.KeyEvent
@@ -24,20 +24,16 @@ import com.lc.bangumidemo.R
 import com.lc.bangumidemo.Sqlite.UserDatadatabase.Userdataupdata
 import io.reactivex.Observer
 import android.graphics.drawable.ColorDrawable
-import android.widget.Toast
-import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
-import android.provider.Settings
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.view.Menu
-import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.core.app.ActivityCompat
-import androidx.core.os.postDelayed
 import com.lc.bangumidemo.Sqlite.CollectDatabase.*
 import com.lc.bangumidemo.Sqlite.NoveDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
@@ -45,6 +41,8 @@ import org.jetbrains.anko.toast
 import java.util.*
 
 class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
+     var nowindex: BookIndexclass? = null
+
     lateinit var buttonback:Animation
     lateinit var buttonshow:Animation
     lateinit var toorbarshow:Animation
@@ -66,7 +64,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     lateinit var disposable: Disposable
     //tts语言
     lateinit var tts :TextToSpeech
-
+    var mParams : HashMap<String,String> = HashMap()
     override fun setRes(): Int {
         return R.layout.tesst
     }
@@ -129,6 +127,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
 
                 }
 
+                @SuppressLint("LongLogTag")
                 override fun onNext(t: RxBusBaseMessage) {
                         if (t.code == 0) {
                             Log.e("RXJAVA", "初始化初始章节")
@@ -149,6 +148,23 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                             Log.e("RXJAVA", "关闭左侧菜单")
                             leftmenu.startAnimation(leftmenuback)
                         }
+                    if (t.code == 4) {
+                        Log.e("RXJAVA", "更新索引")
+                       nowindex = t.`object` as BookIndexclass
+                        Log.i("bookindex-info-bookname", nowindex!!.bookname)
+                        Log.i("bookindex-info-author", nowindex!!.author)
+                        Log.i("bookindex-info-contentindex", nowindex!!.contentindex.toString())
+                        Log.i("bookindex-info-hardcontentindex", nowindex!!.hardcontentindex.toString())
+                        Log.i("bookindex-info-hardpageindex", nowindex!!.hardpageindex.toString())
+                    }
+                    if (t.code == 5) {
+                        Log.e("RXJAVA", "播放语音")
+                        var res=getnowbookreaddata()
+                        if (res != null) {
+                            tts.speak(res,TextToSpeech.QUEUE_FLUSH,null)
+                        }
+
+                    }
                 }
                 override fun onComplete() {
                 }
@@ -160,46 +176,59 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
 
     override fun initaction() {
         super.initaction()
+        //初始化语言模块
+        tts=TextToSpeech(this,this)
         Rxrecive(0)//注册初始化订阅者
         Rxrecive(1)//注册初始化订阅者
         Rxrecive(2)//注册初始化订阅者
         Rxrecive(3)//注册listview订阅者
-
+        Rxrecive(4)//注册索引订阅者
+        Rxrecive(5)//注册语言播放
         //查询索引信息
         Bookselect.selectbookindex(this)
         //开始进行加载
         initloadbookdatatopage(this, bookDetail, hardpageindex)
         handler=Handler()
             runnable = Runnable{
+                if(ismenushow){
+                    buttonmenu.startAnimation(buttonback)
+                    readtoolbar.startAnimation(toorbarback)
+                }
                 if (isautoread) {
                     click(1000, 500)
                     lockscreen(false)
-                    handler.postDelayed(runnable, 6000);
+                    handler.postDelayed(runnable, 10000)
                 }
                 if (isspeek){
                     lockscreen(false)
-                    //查询索引信息
-                    var res=Bookselect.selectbookindex(this)
-                    if (res!=null) {
-                        var sult = Bookselect.selectbookindex(this)
-                        var i = MyDatabaseHelper(this, "bookstore", null, 1)
-                        var selectdata = Selectclass(
-                            bookDetail!!.data.name,
-                            bookDetail!!.data.author,
-                            bookDetail!!.list.size
-                        )
-                        //语音
-                        var resultnow = Bookselect.selectbookdata(i, selectdata, sult!!.pageindex)
-//                        if (returnsultpre != null) {
-//                            tts.speak(returnsultpre.bookdata,TextToSpeech.QUEUE_FLUSH,null)
-//                        }
-                        i.close()
-                    }
+                            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                                override fun onStart(utteranceId: String?) {
+                                print("onStart")
+                                }
+
+                                override fun onStop(utteranceId: String?, interrupted: Boolean) {
+                                    super.onStop(utteranceId, interrupted)
+                                    print("onStop")
+                                }
+
+                                override fun onDone(utteranceId: String?) {
+                                    print("onDone")
+                                    click(1000, 100)
+                                    RxBus.getInstance().send(5, RxBusBaseMessage(5,"null"))
+                                }
+
+                                override fun onError(utteranceId: String?) {
+                                    Log.e("语音播放失败","utteranceId")
+                                }
+                            })
+                             mParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"messageID")
+                             RxBus.getInstance().send(5, RxBusBaseMessage(5,"null"))
+
+
+
                 }
         }
-        //初始化语言模块
-        tts=TextToSpeech(this,this)
-        }
+          }
 
     fun initmyview() {
         //初始化动画
@@ -237,9 +266,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 ismenushow=false
                 closeothermenu()
                 lockscreen(false)
-                if(menufloat.isVisible){
-                    handler.postDelayed(runnable,0)
-                }
             }
 
             override fun onAnimationStart(animation: Animation?) {
@@ -260,9 +286,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 lockscreen(true)
                 closeothermenu()
                 seakbar.isVisible=true
-                if(menufloat.isVisible){
-                    handler.removeCallbacks(runnable)
-                }
+
             }
         })
 
@@ -407,7 +431,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
             isautoread=false
             isspeek=false
             tts.stop()
-            tts.shutdown()
         }
         collike.setOnClickListener {
             if(bookDetail!!.data.url!=null) {
@@ -547,7 +570,29 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         }
     }
 
-
+    fun getnowbookreaddata(): String? {
+        //查询索引信息
+        var resultant:BookReadclass
+         if(nowindex!=null){
+            var i = MyDatabaseHelper(this, "bookstore", null, 1)
+            //语音
+             i= MyDatabaseHelper(this, "bookstore", null, 1)
+             var selectclass=Selectclass(bookDetail!!.data.name, bookDetail!!.data.author, bookDetail!!.list.size)
+             var rest=Bookselect.selectbookdata(i,selectclass, nowindex!!.pageindex)
+             var list = PagesizeUtil.txttolist(
+                 rest!!.content,
+                 this,
+                 fontsize,
+                 linesize
+             )
+             i.close()
+             var temp =nowindex!!.contentindex
+             if(temp>=(list.size-1)){temp=list.size-1}
+             if(temp<=0){temp=0}
+             return list[temp]
+        }
+        return null
+    }
     private fun click(x:Int,y:Int) {
         val order = listOf("input",
             "tap",
