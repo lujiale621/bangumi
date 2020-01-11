@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.animation.Animation
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -24,6 +25,14 @@ import org.jetbrains.anko.contentView
 class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     internal lateinit var mPageFlipView: PageFlipView
     internal lateinit var mGestureDetector: GestureDetector
+
+    lateinit var buttonback: Animation
+    lateinit var buttonshow: Animation
+    lateinit var toorbarshow: Animation
+    lateinit var toorbarback: Animation
+    lateinit var leftmenushow: Animation
+    lateinit var leftmenuback: Animation
+
     var customView: View? = null
 
     init {
@@ -56,8 +65,8 @@ class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
     }
 
     private fun initview() {
-        localreadtoolbar.isVisible=false
-        localbuttonmenu.isVisible=false
+//        localreadtoolbar.isVisible=false
+//        localbuttonmenu.isVisible=false
         localleftmenu.isVisible=false
         //隐藏设置栏
         localsetmenu.isVisible=false
@@ -66,8 +75,12 @@ class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
         localhuanyuanlayout.isVisible=false
         localdiag.isVisible=false
         localanmoread.hide()
-//        localavi.show()
-
+        localavi.hide()
+        setSupportActionBar(localreadtoolbar)
+        supportActionBar!!.setHomeButtonEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.iconback)
     }
 
     private fun showAbout() {
@@ -203,7 +216,13 @@ class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
     private var vt: VelocityTracker? = null
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if(ev!!.action==MotionEvent.ACTION_DOWN){
+        if(!localbuttonmenu.isVisible) {
+            return touchpageviewevent(ev)
+        }else{
+            return touchmenuviewevent(ev)
+        }
+    }fun touchmenuviewevent(ev: MotionEvent?): Boolean {
+        if (ev!!.action == MotionEvent.ACTION_DOWN) {
             lastX = ev.x
             try {
                 if (vt == null) {
@@ -216,15 +235,39 @@ class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
             }
             vt!!.addMovement(ev)
         }
-        if(ev.action==MotionEvent.ACTION_MOVE){
+        if (ev.action == MotionEvent.ACTION_MOVE) {
             moveLenght = ev.x - lastX
         }
-        if (ev.action == MotionEvent.ACTION_UP ) {
+        if (ev.action == MotionEvent.ACTION_UP) {
             var lastX = ev.x
-            if((lastX > 300 && lastX < 750 && Math.abs(moveLenght) < 30&&Math.abs(vt!!.xVelocity)<30))
-            {
+            if ((lastX > 300 && lastX < 750 && Math.abs(moveLenght) < 30 && Math.abs(vt!!.xVelocity) < 30)) {
                 onclickcenterscreen()
-            }else{
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+    fun touchpageviewevent(ev: MotionEvent?): Boolean {
+        if (ev!!.action == MotionEvent.ACTION_DOWN) {
+            lastX = ev.x
+            try {
+                if (vt == null) {
+                    vt = VelocityTracker.obtain()
+                } else {
+                    vt!!.clear()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            vt!!.addMovement(ev)
+        }
+        if (ev.action == MotionEvent.ACTION_MOVE) {
+            moveLenght = ev.x - lastX
+        }
+        if (ev.action == MotionEvent.ACTION_UP) {
+            var lastX = ev.x
+            if ((lastX > 300 && lastX < 750 && Math.abs(moveLenght) < 30 && Math.abs(vt!!.xVelocity) < 30)) {
+                onclickcenterscreen()
+            } else {
                 mPageFlipView.onFingerUp(ev.x, ev.y)
                 return true
 
@@ -234,8 +277,9 @@ class FlipReadActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
     }
 
 
-    private fun onclickcenterscreen() {
 
+    private fun onclickcenterscreen() {
+        localbuttonmenu.isVisible=false
       }
 
     override fun onPause() {

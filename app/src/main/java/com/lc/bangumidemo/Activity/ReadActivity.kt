@@ -959,6 +959,8 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         return super.onCreateOptionsMenu(menu)
     }
 
+
+
     override fun onRestart() {
         super.onRestart()
         //查询索引信息
