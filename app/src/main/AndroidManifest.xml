@@ -19,6 +19,7 @@
 
 
     <application
+        android:name=".Activity.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
@@ -50,9 +51,7 @@
         <activity android:name=".Activity.MoviePlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.Testactivity"></activity>
-
-
+        <activity android:name=".Activity.testdemo"></activity>
     </application>
 
 

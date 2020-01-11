@@ -34,7 +34,10 @@ import android.speech.tts.UtteranceProgressListener
 import android.view.Menu
 import android.view.MotionEvent
 import android.widget.*
+import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.afollestad.materialdialogs.MaterialDialog
 import com.lc.bangumidemo.Adapter.Recadapt
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookResult
 import com.lc.bangumidemo.MyRetrofit.ResClass.Bookdata
@@ -42,6 +45,7 @@ import com.lc.bangumidemo.MyRetrofit.Retrofit.Retrofitcall
 import com.lc.bangumidemo.Sqlite.CollectDatabase.*
 import com.lc.bangumidemo.Sqlite.NoveDatabase.*
 import com.lc.bangumidemo.Util.FileUtils
+import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.search.*
 import org.jetbrains.anko.toast
 import retrofit2.Call
@@ -88,8 +92,15 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         setliangdu.isVisible=false
         menufloat.isVisible=false
         huanyuanlayout.isVisible=false
+        diag.isVisible=false
         anmoread.hide()
         avi.show()
+        sghost.startAnim()
+        sghost.setViewColor(Color.GRAY)
+        sghost.setHandColor(Color.BLACK)
+        processlv.setViewColor(Color.RED)
+        processlv.setValue(50)
+        processlv.setTextColor(Color.parseColor("#000000"))
         //设置悬浮按钮
         menufloat.menuButtonColorNormal=Color.parseColor("#80DEEA")
         menufloat.menuButtonColorPressed=Color.parseColor("#80CBC4")
@@ -194,8 +205,12 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                         if (res != null) {
                             tts.speak(res,TextToSpeech.QUEUE_FLUSH,null)
                         }
-
                     }
+                    if (t.code == 6) {
+                        Log.e("RXJAVA", "开始下载")
+                        diag.isVisible=true
+                    }
+
                 }
                 override fun onComplete() {
                 }
@@ -215,6 +230,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         Rxrecive(3)//注册listview订阅者
         Rxrecive(4)//注册索引订阅者
         Rxrecive(5)//注册语言播放
+        Rxrecive(6)//监听下载
         //查询索引信息
         Bookselect.selectbookindex(this)
 
@@ -402,8 +418,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                     menufloat.isVisible=true
                 }
             }
-
-
         })
 
         //初始化阅读界面菜单
@@ -567,6 +581,10 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     }
     override fun initlistener() {
         super.initlistener()
+        quxiao.setOnClickListener {
+            //取消下载
+            diag.isVisible=false
+        }
         huanyuanlist.setOnItemClickListener { parent, view, position, id ->
             var urls = novesourcelist[position].url
             if (urls != null) {
@@ -798,7 +816,9 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                     }
 
                     }
-                R.id.downloadbook ->{}
+                R.id.downloadbook ->{
+                    downloadbook()
+                }
                 R.id.listenbook ->{
                     if(!isautoread) {
                         isspeek = true
@@ -812,6 +832,20 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun downloadbook() {
+        val dialog = MaterialDialog(this).show {
+            title(text="Download")
+            message(text="check you wifi status and this will download to Favorite")
+            positiveButton(text="Agree") { dialog ->
+                RxBus.getInstance().send(6, RxBusBaseMessage(6,"download"))
+            }
+            negativeButton(text="Disagree") { dialog ->
+                // Do something
+            }
+            icon(drawable = getDrawable(R.mipmap.shangchuan))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

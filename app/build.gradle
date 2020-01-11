@@ -34,6 +34,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 
@@ -75,9 +76,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     //shuben
     implementation 'com.github.eschao:android-PageFlip:1.0.2'
-    //JSOUP
-    implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.alibaba:fastjson:1.1.71.android'
     //card
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
     //引导页
@@ -125,14 +123,18 @@ dependencies {
     //图片标签
     implementation 'com.github.open-android:labelview:0.1.0'
     //bugly
-    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
-    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
     //点赞效果
-    compile 'com.sackcentury:shinebutton:1.0.0'
+    implementation 'com.sackcentury:shinebutton:1.0.0'
     //悬浮按钮
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.clans:fab:1.6.4'
     //dao
     implementation 'org.greenrobot:greendao:3.2.2' // add library
+    //dialog
+    implementation 'com.afollestad.material-dialogs:core:3.1.1'
+    //downprogressbar
+    implementation 'com.ldoublem.loadingview:loadingviewlib:1.0'
    }
 
 
