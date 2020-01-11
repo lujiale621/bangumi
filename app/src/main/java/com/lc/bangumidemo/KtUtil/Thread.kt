@@ -278,3 +278,69 @@ fun initloadbookdatatopage(context:Context,book: BookDetail?, positon:Int) {
 
     }).start()
 }
+fun Thdownloadbook(context:Context,book: BookDetail?, positon:Int) {
+    position = positon
+    val mHamdler1 = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                2 -> {
+                    var result: BookContent
+                    try {
+                        var temp:bookdetailinfo
+                        result = msg.obj as BookContent
+                        if(result.code==0){
+                        var string = result.getString(context)
+                        var list = PagesizeUtil.txttolist(
+                            string,
+                            context,
+                            fontsize,
+                            linesize
+                        )
+                         temp=bookdetailinfo(list, position)
+                        }else{
+                            var list = PagesizeUtil.txttolist(
+                                "无法加载本章资源",
+                                context,
+                                fontsize,
+                                linesize
+                            )
+                            temp=bookdetailinfo(list, position)
+                        }
+                        RxBus.getInstance().send(7,RxBusBaseMessage(7,temp))
+                    } catch (e: Exception) {
+                        Log.e("downerror", e.toString())
+                    }
+                }
+            }
+        }
+    }
+    Thread(Runnable {
+        var message = Message()
+        val call = Retrofitcall().getAPIServercontent().getCall(book!!.list[positon].url)
+        call.enqueue(object : Callback<BookContent> {
+            override fun onResponse(call: Call<BookContent>, response: Response<BookContent>) {
+                val st = response.body()
+                println(st)
+                message.obj = st
+                message.what = 2
+                mHamdler1.sendMessage(message)
+            }
+
+            override fun onFailure(call: Call<BookContent>, t: Throwable) {
+                Log.e("initloadbookdatatopage", "连接失败")
+                var list = PagesizeUtil.txttolist(
+                    "无法加载本章资源",
+                    context,
+                    fontsize,
+                    linesize
+                )
+                var temp=bookdetailinfo(list, position)
+                RxBus.getInstance().send(7,RxBusBaseMessage(7,temp))
+
+            }
+        })
+
+
+    }).start()
+}

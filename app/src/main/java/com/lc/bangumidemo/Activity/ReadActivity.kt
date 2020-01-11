@@ -39,6 +39,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.lc.bangumidemo.Adapter.Recadapt
+import com.lc.bangumidemo.Green.*
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookResult
 import com.lc.bangumidemo.MyRetrofit.ResClass.Bookdata
 import com.lc.bangumidemo.MyRetrofit.Retrofit.Retrofitcall
@@ -54,7 +55,12 @@ import retrofit2.Response
 import java.util.*
 
 class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
-     var nowindex: BookIndexclass? = null
+    var _Store:DaoUtilsStore = DaoUtilsStore.getInstance()
+    lateinit var bookindexutil: CommonDaoUtils<LocalBookIndex>
+    lateinit var bookdatautil: CommonDaoUtils<LocalBookData>
+    lateinit var bookreaddatautil: CommonDaoUtils<LocalBookReadClass>
+
+    var nowindex: BookIndexclass? = null
     var novesourcelist: MutableList<Bookdata> = mutableListOf()//小说列表
     lateinit var buttonback:Animation
     lateinit var buttonshow:Animation
@@ -62,14 +68,19 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     lateinit var toorbarback:Animation
     lateinit var leftmenushow:Animation
     lateinit var leftmenuback:Animation
+    var downloadlist : MutableList<bookdetailinfo> = mutableListOf()
     var templist:MutableList<String> = mutableListOf()
     var templistdefult:MutableList<String> = mutableListOf()
-     var adapt: ScanViewAdapter?=null
+    var adapt: ScanViewAdapter?=null
     lateinit var runnable:Runnable
     lateinit var handler:Handler
     var isautoread=false
     var isspeek=false
-
+    init {
+        bookindexutil=_Store.bookindexDaoUtils
+        bookdatautil=_Store.bookdataDaoUtils
+        bookreaddatautil=_Store.bookreaddataDaoUtils
+    }
     companion object {
         var ismenushow=false
         var islistshow=false
@@ -150,7 +161,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
             else {
                 //不支持中文就将语言设置为英文
-                tts.setLanguage(Locale.US);
+                tts.setLanguage(Locale.US)
             }
         }
     }
@@ -209,8 +220,72 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                     if (t.code == 6) {
                         Log.e("RXJAVA", "开始下载")
                         diag.isVisible=true
+                        downloadlist.clear()
+                        loadingbook(0)
                     }
+                    if(t.code == 7 ){
+                        var temp =t.`object`
+                        if(temp is bookdetailinfo)
+                        {
+                            Log.e("RXJAVA", "正在下载章节:${bookDetail!!.list[temp.position].num}")
+                            if(temp.position >= bookDetail!!.list.size-1){
+                                Toast.makeText(this@ReadActivity, "下载完成",Toast.LENGTH_LONG).show()
+                                diag.isVisible=false
+                                //插入index
+                                bookreaddatautil.deleteAll()
+                                bookindexutil.deleteAll()
+                                var index=LocalBookIndex()
+                                index.author= bookDetail!!.data.author
+                                index.bookname= bookDetail!!.data.name
+                                index.contentindex=0
+                                index.pageindex=0
+                                index.hardcontentindex=0
+                                index.hardpageindex=0
+                                index.pagecount= bookDetail!!.list.size
+                                bookindexutil.insert(index)
+                                //查询是否有这个表 有则删除
+                                var resultt=bookreaddatautil.queryAll()
+                                for(io in resultt){
+                                    if(io.bookname==bookDetail!!.data.name&&io.author==bookDetail!!.data.author)
+                                    {
+                                        bookreaddatautil.deleteByQueryBuilder(LocalBookReadClassDao.Properties.Bookname.eq(io.bookname))
 
+                                    }
+                                }
+                                var indexs:Int=0
+                                for(atw in downloadlist) {
+                                    var i:Int=0
+                                 for(az in atw.list){
+                                     var readdata = LocalBookReadClass()
+                                     if(i==0){readdata.start=indexs}
+                                     readdata.author= bookDetail!!.data.author
+                                     readdata.bookname= bookDetail!!.data.name
+                                     readdata.pagecount= bookDetail!!.list.size
+                                     readdata.pageindex=atw.position
+                                     readdata.bookdata=az
+                                     readdata.contentindex=i++
+                                     readdata.indexx=indexs++
+                                     readdata.end=indexs
+                                     bookreaddatautil.insert(readdata)
+                                 }
+                                }
+                                //查询结果
+                                var result=bookreaddatautil.queryAll()
+                                var result2=bookindexutil.queryAll()
+                                Log.i("localdatasize",result.size.toString())
+                                Log.i("localindexsize",result2.size.toString())
+                            }else {
+                                loadingbook(temp.position + 1)
+                                downloadlist.add(temp)
+                                if (temp.position <= bookDetail!!.list.size) {
+                                    //刷新UI
+                                    var process =
+                                        ((temp.position + 1).toFloat() / (bookDetail!!.list.size).toFloat()) * 100.0
+                                    processlv.setValue(process.toInt())
+                                }
+                            }
+                        }
+                    }
                 }
                 override fun onComplete() {
                 }
@@ -218,6 +293,18 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 override fun onSubscribe(d: Disposable) {
                 }
             })
+    }
+
+
+    fun runhandler(runfun:()->Unit,delay:Long){
+        var handlercom=Handler()
+        var runnablecom = Runnable {
+            runfun()
+        }
+        handlercom.postDelayed(runnablecom,delay)
+    }
+    private fun loadingbook(position:Int) {
+        Thdownloadbook(this, bookDetail, position + 0)
     }
 
     override fun initaction() {
@@ -231,10 +318,10 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         Rxrecive(4)//注册索引订阅者
         Rxrecive(5)//注册语言播放
         Rxrecive(6)//监听下载
+        Rxrecive(7)//监听下载章节
         //查询索引信息
         Bookselect.selectbookindex(this)
-
-        destoryandsave(this)
+         destoryandsave(this)
         //
         //开始进行加载
         initloadbookdatatopage(this, bookDetail, hardpageindex)
@@ -276,7 +363,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 }
         }
           }
-
     fun initmyview() {
         //初始化动画
         avi.hide()
@@ -290,9 +376,7 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         //动画监听
         leftmenuback.setAnimationListener(object :Animation.AnimationListener{
             override fun onAnimationRepeat(animation: Animation?) {
-
             }
-
             override fun onAnimationEnd(animation: Animation?) {
                 leftmenu.isVisible=false
                 islistshow=false
@@ -306,7 +390,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
         buttonback.setAnimationListener(object :Animation.AnimationListener{
             override fun onAnimationRepeat(animation: Animation?) {
             }
-
             override fun onAnimationEnd(animation: Animation?) {
                 buttonmenu.isVisible=false
                 readtoolbar.isVisible=false
@@ -314,35 +397,29 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                 closeothermenu()
                 lockscreen(false)
             }
-
             override fun onAnimationStart(animation: Animation?) {
                 lockscreen(true)
             }
         })
         buttonshow.setAnimationListener(object :Animation.AnimationListener{
             override fun onAnimationRepeat(animation: Animation?) {
-
             }
 
             override fun onAnimationEnd(animation: Animation?) {
                 lockscreen(false)
-
             }
 
             override fun onAnimationStart(animation: Animation?) {
                 lockscreen(true)
                 closeothermenu()
                 seakbar.isVisible=true
-
             }
         })
-
         mulu.setOnClickListener {
             closeothermenu()
             readtoolbar.isVisible=false
             buttonmenu.isVisible=false
             ismenushow=false
-
             //open list
             leftmenu.isVisible=true
             leftmenu.startAnimation(leftmenushow)
@@ -386,7 +463,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
             Bookupdata.updata(db, updata)
             //更新索引
             this.recreate()
-
         }
 
         var returnsult= Bookselect.selectbookindex(this)
@@ -510,7 +586,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     }
 
     fun getbookdata(result: BookResult) {
-
         val hand = object : Handler() {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
@@ -531,7 +606,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                             anmoread.hide()
                             startActivity(intent)
                         }
-
                     }
                 }
             }

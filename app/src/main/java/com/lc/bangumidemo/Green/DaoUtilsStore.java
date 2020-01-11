@@ -4,7 +4,7 @@ public class DaoUtilsStore
     private volatile static DaoUtilsStore instance = new DaoUtilsStore();
     private CommonDaoUtils<LocalBookData> bookdataDaoUtils;
     private CommonDaoUtils<LocalBookReadClass> bookreaddataDaoUtils;
-
+    private CommonDaoUtils<LocalBookIndex> bookindexDaoUtils;
     public static DaoUtilsStore getInstance()
     {
         return instance;
@@ -18,6 +18,10 @@ public class DaoUtilsStore
 
         LocalBookReadClassDao _BookReadDao = mManager.getDaoSession().getLocalBookReadClassDao();
         bookreaddataDaoUtils = new CommonDaoUtils(LocalBookReadClass.class, _BookReadDao);
+
+
+        LocalBookIndexDao _BookIndexDao = mManager.getDaoSession().getLocalBookIndexDao();
+        bookindexDaoUtils = new CommonDaoUtils(LocalBookIndex.class, _BookIndexDao);
     }
 
     public CommonDaoUtils<LocalBookData> getBookdataDaoUtils()
@@ -25,8 +29,7 @@ public class DaoUtilsStore
         return bookdataDaoUtils;
     }
 
-    public CommonDaoUtils<LocalBookReadClass> getBookreaddataDaoUtils()
-    {
-        return bookreaddataDaoUtils;
-    }
+    public CommonDaoUtils<LocalBookReadClass> getBookreaddataDaoUtils() { return bookreaddataDaoUtils; }
+
+    public CommonDaoUtils<LocalBookIndex> getBookindexDaoUtils() { return bookindexDaoUtils; }
 }

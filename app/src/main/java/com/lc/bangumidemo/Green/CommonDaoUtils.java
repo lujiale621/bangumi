@@ -10,9 +10,9 @@ import java.util.List;
 
 public class CommonDaoUtils<T> {
     private static final String TAG = CommonDaoUtils.class.getSimpleName();
-    private DaoSession daoSession;
-    private Class<T> entityClass;
-    private AbstractDao<T,Long> entityDao;
+    public DaoSession daoSession;
+    public Class<T> entityClass;
+    public AbstractDao<T,Long> entityDao;
     public CommonDaoUtils(Class<T> pEntityClass,AbstractDao<T,Long> pEntityDao)
     {
         DaoManager mManager = DaoManager.getInstance();
@@ -156,5 +156,15 @@ public class CommonDaoUtils<T> {
     {
         QueryBuilder<T> queryBuilder = daoSession.queryBuilder(entityClass);
         return queryBuilder.where(cond, condMore).list();
+    }
+    /**
+     * 使用queryBuilder进行delete
+     *
+     * @return
+     */
+    public void deleteByQueryBuilder(WhereCondition cond, WhereCondition... condMore)
+    {
+        QueryBuilder<T> queryBuilder = daoSession.queryBuilder(entityClass);
+        queryBuilder.where(cond, condMore).buildDelete().executeDeleteWithoutDetachingEntities();
     }
 }
