@@ -47,6 +47,9 @@ class Collectdatadapter(private val context: Context, private val collectlist: A
                     ) {
                         //加载完成后的处理
                         cover.setImageBitmap(resource)
+                        if(collectlist[position].url.equals("null")){
+                            cover.labelText="本地"
+                        }
                     }
                 })
 

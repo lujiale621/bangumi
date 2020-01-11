@@ -158,7 +158,7 @@ public class CommonDaoUtils<T> {
         return queryBuilder.where(cond, condMore).list();
     }
     /**
-     * 使用queryBuilder进行delete
+     * 使用deleteByQueryBuilder进行delete
      *
      * @return
      */
@@ -167,4 +167,10 @@ public class CommonDaoUtils<T> {
         QueryBuilder<T> queryBuilder = daoSession.queryBuilder(entityClass);
         queryBuilder.where(cond, condMore).buildDelete().executeDeleteWithoutDetachingEntities();
     }
+    public void updataByQueryBuilder(WhereCondition cond, WhereCondition... condMore)
+    {
+        QueryBuilder<T> queryBuilder = daoSession.queryBuilder(entityClass);
+        queryBuilder.where(cond, condMore).build().unique();
+    }
+
 }

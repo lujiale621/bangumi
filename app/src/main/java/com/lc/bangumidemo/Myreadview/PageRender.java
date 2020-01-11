@@ -24,7 +24,7 @@ public abstract class PageRender implements OnPageFlipListener {
     final static int DRAW_ANIMATING_FRAME = 1;
     final static int DRAW_FULL_PAGE = 2;
 
-    final static int MAX_PAGES = 30;
+     static int MAX_PAGES = 30;
 
     int mPageNo;
     int mDrawCommand;

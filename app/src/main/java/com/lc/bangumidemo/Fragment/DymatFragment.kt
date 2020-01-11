@@ -15,6 +15,9 @@ import java.util.ArrayList
 import androidx.core.os.HandlerCompat.postDelayed
 
 import android.os.Handler
+import com.lc.bangumidemo.Activity.FlipReadActivity
+import com.lc.bangumidemo.KtUtil.localbookname
+import org.jetbrains.anko.startActivity
 
 
 class DymatFragment :BaseFragment() {
@@ -42,7 +45,12 @@ class DymatFragment :BaseFragment() {
             override fun onItemClick(requestdata: Collectdataclass) {
                 lockscreen(true)
                 animcol.show()
+                if (requestdata.url.equals("null")){
+                    localbookname=requestdata.name
+                    mcontext.startActivity<FlipReadActivity>()
+                }else{
                 gotoread(requestdata,mcontext,null)
+                }
             }
         })
         dymgridview.adapter=collectadapter

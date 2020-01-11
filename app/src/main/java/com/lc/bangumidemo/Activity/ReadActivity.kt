@@ -232,8 +232,6 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                                 Toast.makeText(this@ReadActivity, "下载完成",Toast.LENGTH_LONG).show()
                                 diag.isVisible=false
                                 //插入index
-                                bookreaddatautil.deleteAll()
-                                bookindexutil.deleteAll()
                                 var index=LocalBookIndex()
                                 index.author= bookDetail!!.data.author
                                 index.bookname= bookDetail!!.data.name
@@ -274,6 +272,25 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
                                 var result2=bookindexutil.queryAll()
                                 Log.i("localdatasize",result.size.toString())
                                 Log.i("localindexsize",result2.size.toString())
+                                //最后添加到收藏夹
+                                    var db = Collectdbhelper(this@ReadActivity, "collect.db", null, 1)
+                                    var selectdata = Collectdataclass(
+                                        bookDetail!!.data.name,
+                                        bookDetail!!.data.author,
+                                        bookDetail!!.list.size,
+                                        bookDetail!!.data.time,
+                                        "本地小说",
+                                        bookDetail!!.data.cover,
+                                        "null"
+                                    )
+                                    var result3 = CollectdataSelect.selectcollectdata(db, selectdata)
+                                    if (result3 == null) {
+                                        CollectdataInsert.insertcollectdata(db, selectdata)
+                                    } else {
+                                        CollectdataUpdata.updata(db, selectdata)
+                                    }
+                                    db.close()
+                                //
                             }else {
                                 loadingbook(temp.position + 1)
                                 downloadlist.add(temp)

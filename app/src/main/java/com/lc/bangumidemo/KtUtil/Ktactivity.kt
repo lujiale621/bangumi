@@ -41,6 +41,7 @@ var backgroundcolor:String="#ffffff"
 var userbackground:String="null"
 var hardpageindex=0
 var hardcontentindex=0
+var localbookname="null"
 
 
 

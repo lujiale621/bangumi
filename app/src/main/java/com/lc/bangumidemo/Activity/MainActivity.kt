@@ -107,7 +107,7 @@ class MainActivity :BaseActivity(){
 
             }
             R.id.shezhi->{
-            startActivity<FlipReadActivity>()
+
             }
             R.id.clean->{
 
