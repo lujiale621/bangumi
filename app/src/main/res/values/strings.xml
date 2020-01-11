@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">bangumidemo</string>
+        <string name="app_name">bangumidemo</string>
+        <string name="title_activity_main">PageFlip Demo</string>
+        <string name="about_mesh_pixels">
+    </string>
+        <string name="about_codes">
+    </string>
+        <string name="about_contact">
+    </string>
 </resources>

@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+//greendao
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+
 android {
 
     compileSdkVersion 29
@@ -127,6 +131,8 @@ dependencies {
     compile 'com.sackcentury:shinebutton:1.0.0'
     //悬浮按钮
     compile 'com.github.clans:fab:1.6.4'
+    //dao
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
    }
 
 

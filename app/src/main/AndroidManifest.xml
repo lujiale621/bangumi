@@ -37,6 +37,7 @@
         <activity android:name=".Activity.IntroActivity"
             android:label="@string/define_appintro"
             />
+        <activity android:name=".Activity.FlipReadActivity"></activity>
         <activity android:name=".Activity.MainActivity"></activity>
         <activity android:name=".Activity.Searchactivity"></activity>
         <activity android:name=".Activity.BookDetailActivity"></activity>
@@ -49,6 +50,7 @@
         <activity android:name=".Activity.MoviePlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <activity android:name=".Activity.Testactivity"></activity>
 
 
     </application>
