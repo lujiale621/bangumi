@@ -70,11 +70,8 @@ class Pageview : View {
     }
 
     protected fun calcFontSize(size: Int): Int {
-
         return (size * context!!.resources.displayMetrics
-
             .scaledDensity).toInt()
-
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 
 import com.lc.bangumidemo.R
+import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookreadclean
 import com.lc.bangumidemo.Util.FragmentUtil
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
@@ -104,13 +105,17 @@ class MainActivity :BaseActivity(){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.download->{
-
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.container, FragmentUtil.fragmentUtil.dymatFragment,null)
+                transaction.commit()
             }
             R.id.shezhi->{
 
             }
             R.id.clean->{
-
+                Bookreadclean.clean(this)
+                Bookreadclean.cleancollect(this)
+                recreate()
             }
         }
 
