@@ -4,16 +4,23 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+//greendao
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+
 android {
 
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.lc.bangumidemo"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
-        versionName "2.0"
+        versionCode 3
+        versionName "3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
@@ -30,6 +37,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    greendao {
+//数据库的schema版本，也可以理解为数据库版本号
+        schemaVersion 1
+//设置DaoMaster、DaoSession、Dao包名，也就是要放置这些类的包的全路径。
+        daoPackage 'com.lc.bangumidemo.Green'
+//设置DaoMaster、DaoSession、Dao目录
+        targetGenDir 'src/main/java'
+    }
+
 }
 
 
@@ -69,11 +85,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    //shuben
-    implementation 'com.github.eschao:android-PageFlip:1.0.2'
-    //JSOUP
-    implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.alibaba:fastjson:1.1.71.android'
     //card
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
     //引导页
@@ -121,12 +132,18 @@ dependencies {
     //图片标签
     implementation 'com.github.open-android:labelview:0.1.0'
     //bugly
-    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
-    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
     //点赞效果
-    compile 'com.sackcentury:shinebutton:1.0.0'
+    implementation 'com.sackcentury:shinebutton:1.0.0'
     //悬浮按钮
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.clans:fab:1.6.4'
+    //dao
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    //dialog
+    implementation 'com.afollestad.material-dialogs:core:3.1.1'
+    //downprogressbar
+    implementation 'com.ldoublem.loadingview:loadingviewlib:1.0'
    }
 
 

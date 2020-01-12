@@ -3,6 +3,7 @@ package com.lc.bangumidemo.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 
@@ -55,11 +56,15 @@ class IntroActivity : AppIntro() {
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
         // Do something when users tap on Skip button.
+        lockscreen(true)
+        this.finish()
         startActivity<MainActivity>()
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        lockscreen(true)
+        this.finish()
         startActivity<MainActivity>()
     }
 
@@ -131,4 +136,8 @@ class IntroActivity : AppIntro() {
 
 
     }
+    open fun lockscreen(islock:Boolean){
+        if(islock) { this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) }
+        else { this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) } }
+
 }

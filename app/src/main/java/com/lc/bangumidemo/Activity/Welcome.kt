@@ -17,16 +17,13 @@ import org.jetbrains.anko.startActivity
 
 class Welcome : AppCompatActivity() ,ViewPropertyAnimatorListener{
     override fun onAnimationCancel(view: View?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+       }
 
     override fun onAnimationStart(view: View?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+       }
 
     override fun onAnimationEnd(view: View?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-       //获取屏幕数据
+          //获取屏幕数据
 
         var display = getWindowManager().getDefaultDisplay();
         screenwidth =display.width

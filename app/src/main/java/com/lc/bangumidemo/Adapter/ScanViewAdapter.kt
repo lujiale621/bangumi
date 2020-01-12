@@ -74,6 +74,9 @@ class ScanViewAdapter(
         }
         mydrawable.setBounds(0,0, screenwidth, screenheight)
         setbkcolor(mydrawable)
+        var retsult = selectclass?.let { Bookselect.selectbookreaddata(db!!, it, position) }
+        RxBus.getInstance().send(4, RxBusBaseMessage(4,startindex))
+
     }
         fun setonPageclickListener(view: ScanView,onpageclick: ScanView.OnpageClick){
             view.setOnpageClick(onpageclick)
@@ -112,6 +115,8 @@ class ScanViewAdapter(
                     Bookupdata.updata(db!!, requese)
                     updatamenu(context,pagesize,pagetitle, pace)
                     Mapupdata(context, requese)
+                    RxBus.getInstance().send(4, RxBusBaseMessage(4,requese))
+
                 } else {
                     requese = BookIndexclass(
                         null,
@@ -126,6 +131,8 @@ class ScanViewAdapter(
                     Bookupdata.updata(db!!, requese)
                     updatamenu(context,pagesize,pagetitle, pace)
                     Mapupdata(context, requese)
+                    RxBus.getInstance().send(4, RxBusBaseMessage(4,requese))
+
                 }
                 ScanView.INDEXTAGRIG = false
                 ScanView.INDEXTAGLETE = false

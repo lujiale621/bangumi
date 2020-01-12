@@ -6,17 +6,20 @@ import android.os.Build
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 
 import com.lc.bangumidemo.R
+import com.lc.bangumidemo.Sqlite.NoveDatabase.Bookreadclean
 import com.lc.bangumidemo.Util.FragmentUtil
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.app_bar_base.*
 import kotlinx.android.synthetic.main.mainlayout.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 
@@ -97,6 +100,26 @@ class MainActivity :BaseActivity(){
             transaction.replace(R.id.container, FragmentUtil.fragmentUtil.getFragment(it)!!,it.toString())
             transaction.commit()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.download->{
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.container, FragmentUtil.fragmentUtil.dymatFragment,null)
+                transaction.commit()
+            }
+            R.id.shezhi->{
+
+            }
+            R.id.clean->{
+                Bookreadclean.clean(this)
+                Bookreadclean.cleancollect(this)
+                recreate()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

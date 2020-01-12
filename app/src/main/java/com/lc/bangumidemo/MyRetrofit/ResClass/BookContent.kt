@@ -15,6 +15,7 @@ data class BookContent (
         var txt:String= String()
         for(i in content) {
             var cutbreak=i.replace(" ", "")
+            cutbreak=cutbreak.replace("　", "")
             cutbreak="　　"+cutbreak
             var linecountsize=getlinecount(context, screenwidth, fontsize)
             var resec=(cutbreak.length+2)%linecountsize

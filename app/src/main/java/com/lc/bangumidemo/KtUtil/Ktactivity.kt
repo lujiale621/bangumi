@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import com.lc.bangumidemo.Activity.MhuaReadActivity
 import com.lc.bangumidemo.Activity.ReadActivity
 import com.lc.bangumidemo.MyRetrofit.ResClass.BookDetail
@@ -20,6 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 import java.util.ArrayList
+import kotlin.math.log
 
 var isfirst:Boolean=false//是否第一次启动
 var bookDetail : BookDetail?=null
@@ -31,14 +33,16 @@ var movielists: MutableList<DetailResult> = mutableListOf()//漫画列表
 var moviesource: DetailList? = null//电影源
 var screenwidth=0      //初始屏幕宽度
 var screenheight=0    //初始屏幕高度
-var fontsize =23 //默认字体大小
-var linesize =16 //默认显示行数
+var fontsize =18 //默认字体大小
+var linesize =15 //默认显示行数
+var isflip=false //翻页模式
 var pencolor = Color.parseColor("#000000")
 var position:Int=0
 var backgroundcolor:String="#ffffff"
 var userbackground:String="null"
 var hardpageindex=0
 var hardcontentindex=0
+var localbookname="null"
 
 
 
@@ -123,28 +127,33 @@ object PagesizeUtil{
 fun destoryandsave(context: Context)
 {
     Bookreadclean.clean(context)
-    //查询是否存在索引
-    var db= MyDatabaseHelper(context, "bookstore", null, 1)
-    var selectindex = Selectclass(
-        bookDetail!!.data.name,
-        bookDetail!!.data.author,
-        bookDetail!!.list.size
-    )
-    var returnsult= Bookselect.selectindex(db,selectindex)
-    if (returnsult != null) {
-        hardpageindex =returnsult.pageindex
+    try {
+        //查询是否存在索引
+        var db= MyDatabaseHelper(context, "bookstore", null, 1)
+        var selectindex = Selectclass(
+            bookDetail!!.data.name,
+            bookDetail!!.data.author,
+            bookDetail!!.list.size
+        )
+        var returnsult= Bookselect.selectindex(db,selectindex)
+        if (returnsult != null) {
+            hardpageindex =returnsult.pageindex
+        }
+        if (returnsult != null) {
+            hardcontentindex =returnsult.contentindex
+        }
+        var destoryvalue= BookIndexclass(
+            null, bookDetail!!.data.author, bookDetail!!.data.name,
+            hardpageindex,
+            hardcontentindex, bookDetail!!.list.size,
+            hardpageindex,
+            hardcontentindex
+        )
+        Bookupdata.updata(db,destoryvalue)
+    }catch (e:Exception){
+        Log.e("destoryandsave",e.toString())
     }
-    if (returnsult != null) {
-        hardcontentindex =returnsult.contentindex
-    }
-    var destoryvalue= BookIndexclass(
-        null, bookDetail!!.data.author, bookDetail!!.data.name,
-        hardpageindex,
-        hardcontentindex, bookDetail!!.list.size,
-        hardpageindex,
-        hardcontentindex
-    )
-    Bookupdata.updata(db,destoryvalue)
+
 }
 fun stdeal(string: String?,line:Int): String {
     if (string == null) {
@@ -169,7 +178,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
             val call = Retrofitcall().getAPIServerdetail().getCall(requestdata.url )
             call.enqueue(object : Callback<BookDetail> {
                 override fun onFailure(call: Call<BookDetail>, t: Throwable) {
-                    println("连接失败")
+                    Log.e("gotoread","连接失败")
                 }
 
                 override fun onResponse(
@@ -184,8 +193,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                             var intent = Intent(context, ReadActivity::class.java)
                             context.startActivity(intent)
                         } catch (e: Exception) {
-                            print("此书已失效")
-
+                            Log.e("gotoread","此书已失效")
                         }
                     }else{
                         var db = Collectdbhelper(context, "collect.db", null, 1)
@@ -239,7 +247,7 @@ fun gotoread(requestdata: Collectdataclass,context: Context, cover: LabelImageVi
                     }
                     override fun onError(code: Int, msg: String?) {
                         super.onError(code, msg)
-                        print("此书已失效")
+                        Log.e("gotoread","此书已失效")
                     }
                 })
             }}
