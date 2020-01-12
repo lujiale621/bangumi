@@ -91,7 +91,8 @@ class ReadActivity :BaseActivity()  , TextToSpeech.OnInitListener {
     lateinit var tts :TextToSpeech
     var mParams : HashMap<String,String> = HashMap()
     override fun setRes(): Int {
-        return R.layout.tesst
+        if(isflip){return R.layout.tesst}else
+        {return R.layout.tesst}
     }
     override fun initview() {
         super.initview()
