@@ -85,8 +85,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    //shuben
-    implementation 'com.github.eschao:android-PageFlip:1.0.2'
     //card
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
     //引导页
