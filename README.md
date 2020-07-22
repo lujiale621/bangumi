@@ -1,4 +1,5 @@
 # bangumi
-![image](https://github.com/lujiale621/bangumi/blob/demo/pictureres/exnov.jpg)
-![image](https://github.com/lujiale621/bangumi/blob/demo/pictureres/exmovie.jpg)
-![image](https://github.com/lujiale621/bangumi/blob/demo/pictureres/exanim.jpg)
+此项目已不再维护
+数据库使用了sqlite和green 
+api可能已经过期
+只供参考
